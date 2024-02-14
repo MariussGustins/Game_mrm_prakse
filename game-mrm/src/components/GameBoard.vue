@@ -132,54 +132,56 @@ export default {
 #game-board {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(20, 20px);
+  grid-template-columns: repeat(20, 2rem); /* Using rem units for better responsiveness */
   border: 2px solid black;
+  background: linear-gradient(135deg, #9b9b9b, #fcfcfc); /* Using Tailwind CSS colors for a gradient background */
 }
 
 .cell {
-  width: 20px;
-  height: 20px;
+  width: 2rem; /* Using rem units for better responsiveness */
+  height: 2rem; /* Using rem units for better responsiveness */
   border: 1px solid gray;
 }
 
 .snake {
-  background-color: green;
+  background-color: #48BB78; /* Green color from Tailwind CSS palette */
 }
 
 .food {
-  background-color: red;
+  background-image: url('food.jpeg'); /* Replace 'food.png' with the path to your food image */
+  background-size: cover;
 }
 
 .arrow {
   position: absolute;
   width: 0;
   height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid black;
+  border-left: 0.5rem solid transparent; /* Using rem units for better responsiveness */
+  border-right: 0.5rem solid transparent; /* Using rem units for better responsiveness */
+  border-bottom: 0.5rem solid black; /* Using rem units for better responsiveness */
   transition: transform 0.2s;
 }
 
 .arrow-up {
-  top: -10px;
+  top: -0.5rem; /* Using rem units for better responsiveness */
   left: 50%;
   transform: translateX(-50%) rotate(180deg);
 }
 
 .arrow-down {
-  bottom: -10px;
+  bottom: -0.5rem; /* Using rem units for better responsiveness */
   left: 50%;
   transform: translateX(-50%);
 }
 
 .arrow-left {
-  left: -10px;
+  left: -0.5rem; /* Using rem units for better responsiveness */
   top: 50%;
   transform: translateY(-50%) rotate(90deg);
 }
 
 .arrow-right {
-  right: -10px;
+  right: -0.5rem; /* Using rem units for better responsiveness */
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
 }
