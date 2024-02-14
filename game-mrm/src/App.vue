@@ -1,26 +1,28 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Testing if Markus like this prt"/>
+  <div id="app">
+    <GameBoard />
+    <p v-if="gameOver">Game Over! Score: {{ score }}</p>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import GameBoard from './components/GameBoard.vue';
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    GameBoard
+  },
+  data() {
+    return {
+      gameOver: false,
+      score: 0
+    };
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
