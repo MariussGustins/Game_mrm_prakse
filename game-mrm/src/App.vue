@@ -1,6 +1,6 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Testing if Markuss like this prooooject"/>
+  <HelloWorld msg="Testing if Markuss like this prt"/>
 </template>
 
 <script>
