@@ -73,21 +73,21 @@ export default {
     moveRight() {
       if (this.direction !== 'left') this.direction = 'right';
     },
-    handleKeyPress(event) {
-      switch (event.key) {
-        case 'ArrowUp':
-          this.moveUp();
-          break;
-        case 'ArrowDown':
-          this.moveDown();
-          break;
-        case 'ArrowLeft':
-          this.moveLeft();
-          break;
-        case 'ArrowRight':
-          this.moveRight();
-          break;
-      }
+      handleKeyPress(event) {
+          switch (event.key) {
+              case 'ArrowUp':
+                  this.direction = 'left';
+                  break;
+              case 'ArrowDown':
+                  this.direction = 'right';
+                  break;
+              case 'ArrowLeft':
+                  this.direction = 'up';
+                  break;
+              case 'ArrowRight':
+                  this.direction = 'down';
+                  break;
+          }
     },
     moveSnake() {
       const head = { ...this.snake[0] };
