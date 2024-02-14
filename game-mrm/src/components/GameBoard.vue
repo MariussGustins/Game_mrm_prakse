@@ -184,3 +184,7 @@ export default {
   transform: translateY(-50%) rotate(-90deg);
 }
 </style>
+
+
+
+<!--jauna versija-->
