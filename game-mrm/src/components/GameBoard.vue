@@ -1,8 +1,22 @@
 <template>
-  <div id="game-board">
-    <div v-for="(row, rowIndex) in board" :key="rowIndex">
-      <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }"></div>
+  <div>
+    <div id="game-board">
+      <div v-for="(row, rowIndex) in board" :key="rowIndex">
+        <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }"></div>
+      </div>
+      <div class="arrow" :class="arrowDirection"></div>
     </div>
+    <p>
+      Controls:
+      <br>
+      - Up Arrow: Move Up
+      <br>
+      - Down Arrow: Move Down
+      <br>
+      - Left Arrow: Move Left
+      <br>
+      - Right Arrow: Move Right
+    </p>
   </div>
 </template>
 
@@ -15,6 +29,11 @@ export default {
       direction: 'right',
       food: {}
     };
+  },
+  computed: {
+    arrowDirection() {
+      return 'arrow-' + this.direction;
+    }
   },
   mounted() {
     this.setupBoard();
@@ -42,19 +61,31 @@ export default {
       } while (this.isSnake(row, col));
       this.food = { row, col };
     },
+    moveUp() {
+      if (this.direction !== 'down') this.direction = 'up';
+    },
+    moveDown() {
+      if (this.direction !== 'up') this.direction = 'down';
+    },
+    moveLeft() {
+      if (this.direction !== 'right') this.direction = 'left';
+    },
+    moveRight() {
+      if (this.direction !== 'left') this.direction = 'right';
+    },
     handleKeyPress(event) {
       switch (event.key) {
         case 'ArrowUp':
-          if (this.direction !== 'down') this.direction = 'up';
+          this.moveUp();
           break;
         case 'ArrowDown':
-          if (this.direction !== 'up') this.direction = 'down';
+          this.moveDown();
           break;
         case 'ArrowLeft':
-          if (this.direction !== 'right') this.direction = 'left';
+          this.moveLeft();
           break;
         case 'ArrowRight':
-          if (this.direction !== 'left') this.direction = 'right';
+          this.moveRight();
           break;
       }
     },
@@ -99,6 +130,7 @@ export default {
 
 <style scoped>
 #game-board {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(20, 20px);
   border: 2px solid black;
@@ -116,5 +148,39 @@ export default {
 
 .food {
   background-color: red;
+}
+
+.arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid black;
+  transition: transform 0.2s;
+}
+
+.arrow-up {
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.arrow-down {
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.arrow-left {
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.arrow-right {
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
 }
 </style>
