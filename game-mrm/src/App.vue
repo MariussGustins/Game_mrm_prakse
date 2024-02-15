@@ -1,13 +1,15 @@
 <template>
   <div id="app">
-    <LogIn v-if="!loggedIn" @login="handleLogin" />
+    <LogIn v-if="!loggedIn" @login="handleLogin" @goToRegister="showRegisterForm" />
     <GameBoard v-if="loggedIn" />
+    <RegisterForm v-if="showRegisterForm" @backToLogin="backToLogin" />
   </div>
 </template>
 
 <script>
 import LogIn from './components/LogIn.vue';
 import GameBoard from './components/GameBoard.vue';
+import RegisterForm from './components/RegisterForm.vue';
 
 export default {
   name: 'App',
@@ -15,24 +17,32 @@ export default {
     return {
       loggedIn: false,
       gameOver: false,
-      score: 0
+      score: 0,
+      showRegisterForm: false
     };
   },
   methods: {
     handleLogin() {
-      // Implement your login logic here
       console.log('Login successful');
-
-      // Set loggedIn to true after successful login
       this.loggedIn = true;
+      this.showRegisterForm = false;
+    },
+    showRegister() {
+      this.showRegisterForm = true;
+    },
+    backToLogin() {
+      this.loggedIn = false;
+      this.showRegisterForm = false;
     }
   },
   components: {
     LogIn,
-    GameBoard
+    GameBoard,
+    RegisterForm
   }
 };
 </script>
+
 
 <style>
 #app {
