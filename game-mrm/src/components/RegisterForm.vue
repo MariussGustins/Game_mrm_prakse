@@ -35,6 +35,7 @@
 
       <div class="button-container">
         <button class="register-button" @click.prevent="register">Register</button>
+        <button class="back-button" @click.prevent="backToLogin">Back to Login</button>
       </div>
     </form>
   </div>
@@ -74,6 +75,10 @@ export default {
       this.password = '';
       this.gender = 'male';
       this.age = null;
+    },
+    backToLogin() {
+      // Trigger the backToLogin event
+      this.$emit('backToLogin');
     }
   }
 };
