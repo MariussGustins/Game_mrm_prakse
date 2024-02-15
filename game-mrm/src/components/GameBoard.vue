@@ -134,13 +134,14 @@ export default {
   display: grid;
   grid-template-columns: repeat(20, 2rem); /* Using rem units for better responsiveness */
   border: 2px solid black;
-  background: linear-gradient(135deg, #9b9b9b, #fcfcfc); /* Using Tailwind CSS colors for a gradient background */
+  background: lightgreen;
+  //background: linear-gradient(135deg, #9b9b9b, #fcfcfc); /* Using Tailwind CSS colors for a gradient background */
 }
 
 .cell {
   width: 2rem; /* Using rem units for better responsiveness */
   height: 2rem; /* Using rem units for better responsiveness */
-  border: 1px solid gray;
+  border: 1px solid black;
 }
 
 .snake {
@@ -187,6 +188,7 @@ export default {
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
 }
+
 </style>
 
 
