@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="log-in-container">
     <form>
       <div class="form-group">
         <label for="username">Username:</label>
@@ -11,7 +11,7 @@
       </div>
 
       <div class="button-container">
-        <button class="login-button" @click.prevent="login">Login</button>
+        <button class="log-in-button" @click.prevent="logIn">Log In</button>
         <button class="register-button" @click.prevent="goToRegister">Register</button>
       </div>
     </form>
@@ -27,7 +27,7 @@ export default {
     };
   },
   methods: {
-    login() {
+    logIn() {
       // Implement your login logic here
       console.log('Logging in with username:', this.username);
 
@@ -43,7 +43,7 @@ export default {
 </script>
 
 <style scoped>
-.login-container {
+.log-in-container {
   max-width: 400px;
   margin: auto;
   padding: 20px;
@@ -73,7 +73,7 @@ input {
   justify-content: space-between;
 }
 
-.login-button {
+.log-in-button {
   background-color: #3498db;
   color: #fff;
   padding: 10px 20px;
