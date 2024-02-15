@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <LogIn v-if="!loggedIn" @login="handleLogin" @goToRegister="showRegisterForm" />
+    <LogIn v-if="!loggedIn" @login="handleLogin" @goToRegister="showRegister" />
     <GameBoard v-if="loggedIn" />
     <RegisterForm v-if="showRegisterForm" @backToLogin="backToLogin" />
   </div>
@@ -42,7 +42,6 @@ export default {
   }
 };
 </script>
-
 
 <style>
 #app {
