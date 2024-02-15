@@ -144,11 +144,13 @@ export default {
 }
 
 .snake {
-  background-color: #48BB78; /* Green color from Tailwind CSS palette */
+  //background-color: #48BB78; /* Green color from Tailwind CSS palette */
+  background-image: url('tarpins.png'); /* Replace 'food.png' with the path to your food image */
+  background-size: cover;
 }
 
 .food {
-  background-image: url('food.jpeg'); /* Replace 'food.png' with the path to your food image */
+  background-image: url('food3.png'); /* Replace 'food.png' with the path to your food image */
   background-size: cover;
 }
 
