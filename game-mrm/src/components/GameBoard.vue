@@ -9,16 +9,16 @@
 
             <!-- Game board -->
             <div id="game-board">
-                <div v-for="(row, rowIndex) in board" :key="rowIndex">
-                    <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }"></div>
-                </div>
-                <div v-if="gameOver" class="game-over">Game Over!
-                    <span v-if="score > 1">You got {{ score }} points</span>
-                    <span v-if="score === 0">You didn't get any point</span>
-                    <span v-if="score === 1">You got {{ score }} point</span>
-                </div>
-                <div class="arrow" :class="arrowDirection"></div>
+            <div v-for="(row, rowIndex) in board" :key="rowIndex">
+                <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }"></div>
             </div>
+            <div v-if="gameOver" class="game-over">Game Over!
+                <span v-if="score > 1">You got {{ score }} points</span>
+                <span v-if="score === 0">You didn't get any point</span>
+                <span v-if="score === 1">You got {{ score }} point</span>
+            </div>
+            <div class="arrow" :class="arrowDirection"></div>
+        </div>
 
             <!-- Player's data section -->
             <div class="player-data">
@@ -44,18 +44,18 @@ export default {
     data() {
         return {
             board: [],
-            snake: [{row: 10, col: 10}],
+            snake: [], // Initialize as an empty array
             direction: 'right',
             food: {},
             gameOver: false,
             score: 0,
             showShop: false,
             skins: [
-                { image: 'skin1.png', cost: 10 },
+                { image: 'food.jpeg', cost: 5 },
                 { image: 'skin2.png', cost: 20 },
                 // Add more skins as needed
             ],
-            currentSnakeSkin: 'default_skin.png', // default skin image
+            currentSnakeSkin: 'food3.png', // default skin image
             highestScore: 0,
         };
     },
@@ -162,11 +162,22 @@ export default {
         startGame() {
             this.gameOver = false;
             this.score = 0;
+            this.snake = [{row: 10, col: 10}]; // Reset the snake length
+            this.currentSnakeSkin = 'food3.png';
             this.setupBoard();
             this.placeFood();
-            this.gameLoop();
+            if (this.gameLoopInterval) {
+                clearInterval(this.gameLoopInterval);
+            }
+            this.gameLoopInterval = setInterval(() => {
+                if (!this.gameOver) {
+                    this.moveSnake();
+                }
+            }, 200);
             window.addEventListener('keydown', this.handleKeyPress);
         },
+
+
         restartGame() {
             this.startGame();
         },
@@ -202,6 +213,7 @@ export default {
     border: 2px solid black;
     background: lightgreen;
 }
+
 .cell {
     width: 20px;
     height: 20px;
@@ -209,8 +221,10 @@ export default {
 }
 
 .snake {
-    background-color: green;
+    background-image: url('food3.png'); /* Default snake skin */
+    background-size: cover;
 }
+
 
 .food {
     background-color: red;
@@ -249,6 +263,7 @@ export default {
     top: 50%;
     transform: translateY(-50%) rotate(-90deg);
 }
+
 /* ... existing styles ... */
 
 .player-data {
