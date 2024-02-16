@@ -1,36 +1,36 @@
 <template>
   <div class="register-form-container">
-    <form @submit.prevent="handleSubmit">
+    <form id="contact-form">
       <div class="form-group">
         <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" v-model="firstName" required />
+        <input type="text" id="firstName" name="first_name" required />
       </div>
       <div class="form-group">
         <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" v-model="lastName" required />
+        <input type="text" id="lastName" name="last_name" required />
       </div>
       <div class="form-group">
         <label for="email">Email Address:</label>
-        <input type="email" id="email" v-model="email" required />
+        <input type="email" id="email" name="email" required />
       </div>
       <div class="form-group">
         <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" required />
+        <input type="text" id="username" name="username" required />
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required />
+        <input type="password" id="password" name="password" required />
       </div>
       <div class="form-group">
         <label for="gender">Gender:</label>
-        <select id="gender" v-model="gender" required>
+        <select id="gender" name="gender" required>
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
       </div>
       <div class="form-group">
         <label for="age">Age:</label>
-        <input type="number" id="age" v-model="age" required />
+        <input type="number" id="age" name="age" required />
       </div>
 
       <div class="button-container">
@@ -42,61 +42,36 @@
 </template>
 
 <script>
-import { createClient } from '@supabase/supabase-js';
-
 export default {
-  data() {
-    return {
-      firstName: '',
-      lastName: '',
-      email: '',
-      username: '',
-      password: '',
-      gender: 'male',
-      age: null,
-      supabase: null
-    };
-  },
-  created() {
-    this.supabase = createClient('https://nnbuvyjitnopekbbmzme.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uYnV2eWppdG5vcGVrYmJtem1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgwNzEwMzIsImV4cCI6MjAyMzY0NzAzMn0.jjwC_4FURg2xwkj3-jmsDBINVutFSxNOnHUIvfHa8dE');
-  },
-  methods: {
-    async handleSubmit() {
-      try {
-        const { error } = await this.supabase
-            .from('users')
-            .insert([
-              {
-                first_name: this.firstName,
-                last_name: this.lastName,
-                email: this.email,
-                username: this.username,
-                password: this.password,
-                gender: this.gender,
-                age: this.age
-              }
-            ]);
+  mounted() {
+    const { createClient } = supabase;
+    let supabase = createClient("https://nnbuvyjitnopekbbmzme.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uYnV2eWppdG5vcGVrYmJtem1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgwNzEwMzIsImV4cCI6MjAyMzY0NzAzMn0.jjwC_4FURg2xwkj3-jmsDBINVutFSxNOnHUIvfHa8dE");
 
-        if (error) {
-          throw new Error(error.message);
+    const form = document.querySelector('#contact-form');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formInputs = form.querySelectorAll('input, select');
+
+      let submission = {};
+
+      formInputs.forEach(element => {
+        const { value, name } = element;
+        if (value) {
+          submission[name] = value;
         }
+      });
 
-        console.log('User registered successfully!');
-        // Reset form fields
-        this.firstName = '';
-        this.lastName = '';
-        this.email = '';
-        this.username = '';
-        this.password = '';
-        this.gender = 'male';
-        this.age = null;
-      } catch (error) {
-        console.error('Error registering user:', error.message);
+      const { error } = await supabase.from('register_data').insert([submission], { returning: 'minimal' });
+
+      if (error) {
+        alert('There was an error, please try again');
+      } else {
+        alert('Thanks for contacting us');
       }
-    },
-    backToLogin() {
-      // Implement this if needed
-    }
+
+      formInputs.forEach(element => element.value = '');
+    });
   }
 };
 </script>
