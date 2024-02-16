@@ -10,7 +10,6 @@
 import LogIn from './components/LogIn.vue';
 import GameBoard from './components/GameBoard.vue';
 import RegisterForm from './components/RegisterForm.vue';
-
 export default {
   name: 'App',
   data() {
@@ -18,28 +17,28 @@ export default {
       loggedIn: false,
       gameOver: false,
       score: 0,
-      showRegisterForm: false
+      showRegisterForm: false,
     };
   },
-  methods: {
-    handleLogin() {
-      console.log('Login successful');
-      this.loggedIn = true;
-      this.showRegisterForm = false;
+    methods: {
+      handleLogin() {
+        console.log('Login successful');
+        this.loggedIn = true;
+        this.showRegisterForm = false;
+      },
+      showRegister() {
+        this.showRegisterForm = true;
+      },
+      backToLogin() {
+        this.loggedIn = false;
+        this.showRegisterForm = false;
+      }
     },
-    showRegister() {
-      this.showRegisterForm = true;
-    },
-    backToLogin() {
-      this.loggedIn = false;
-      this.showRegisterForm = false;
+    components: {
+      LogIn,
+      GameBoard,
+      RegisterForm
     }
-  },
-  components: {
-    LogIn,
-    GameBoard,
-    RegisterForm
-  }
 };
 </script>
 

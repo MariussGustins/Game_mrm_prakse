@@ -1,48 +1,69 @@
 <template>
   <div class="register-form-container">
-    <form id="contact-form">
+    <form action="" method="POST" >
       <div class="form-group">
         <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="first_name" required />
+        <input type="text" v-model="Admin.first_name" id="firstName" name="first_name" required />
       </div>
       <div class="form-group">
         <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="last_name" required />
+        <input type="text" v-model="Admin.last_name" id="lastName" name="last_name" required />
       </div>
       <div class="form-group">
         <label for="email">Email Address:</label>
-        <input type="email" id="email" name="email" required />
+        <input type="email" v-model="Admin.email" id="email" name="email" required/>
       </div>
       <div class="form-group">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
+        <input type="text" v-model="Admin.username" id="username" name="username" required />
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+        <input type="password" v-model="Admin.password" id="password" name="password" required />
       </div>
-      <div class="form-group">
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender" required>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age" required />
-      </div>
-
       <div class="button-container">
-        <button class="register-button">Register</button>
-        <button class="back-button" @click.prevent="backToLogin">Back to Login</button>
+        <button class="register-button" type="submit" @click.prevent="registerUser()">Register</button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+export default {
+  name: "RegisterForm",
+  data() {
+    return {
+      Admin: {
+        first_name: null,
+        last_name: null,
+        email: null,
+        username: null,
+        password: null
+      }
+    };
+  },
+  methods: {
+    registerUser() {
+      const formData = new FormData();
+      formData.append("first_name", this.Admin.first_name);
+      formData.append("last_name", this.Admin.last_name);
+      formData.append("email", this.Admin.email);
+      formData.append("username", this.Admin.username);
+      formData.append("password", this.Admin.password);
 
+      axios.post("http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=register", formData)
+          .then(response => {
+            console.log(response.data);
+            alert("Registration successful!");
+          })
+          .catch(error => {
+            console.error(error);
+            alert("Registration failed. Please try again.");
+          });
+    }
+  }
+};
 </script>
 
 <style scoped>

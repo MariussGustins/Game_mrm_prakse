@@ -1,6 +1,6 @@
 <template>
   <div class="log-in-container">
-    <form>
+    <form @submit.prevent="login">
       <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" id="username" v-model="username" required />
@@ -11,7 +11,7 @@
       </div>
 
       <div class="button-container">
-        <button class="login-button" @click.prevent="login">Login</button>
+        <button class="login-button">Login</button>
         <button class="register-button" @click.prevent="goToRegister">Register</button>
       </div>
     </form>
@@ -27,12 +27,28 @@ export default {
     };
   },
   methods: {
-    login() {
-      // Implement your login logic here
-      console.log('Logging in with username:', this.username);
-
-      // Assuming successful login, trigger the login event
-      this.$emit('login');
+    async login() {
+      try {
+        const response = await fetch('login.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: this.username,
+            password: this.password
+          })
+        });
+        const data = await response.json();
+        if (data.success) {
+          // Successful login, redirect or perform any necessary action
+          console.log('Login successful');
+        } else {
+          console.log('Login failed');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     },
     goToRegister() {
       // Trigger the goToRegister event
