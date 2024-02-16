@@ -71,6 +71,7 @@ export default {
     },
     methods: {
         setupBoard() {
+          this.board = []; //pievienoju sito
             for (let i = 0; i < 20; i++) {
                 this.board.push(new Array(20).fill(0));
             }
