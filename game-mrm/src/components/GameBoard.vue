@@ -5,9 +5,9 @@
         <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }"></div>
       </div>
       <div v-if="gameOver" class="game-over">Game Over!
-        <span v-if="score > 1">Markuss drank {{ score }} lodes</span>
-        <span v-if="score === 0">Markuss didn't get any lodes</span>
-        <span v-if="score === 1">Markuss drank {{ score }} lode</span>
+        <span v-if="score > 1">You got {{ score }} points</span>
+        <span v-if="score === 0">You didn't get any point</span>
+        <span v-if="score === 1">You got {{ score }} point</span>
       </div>
       <div class="arrow" :class="arrowDirection"></div>
     </div>
@@ -151,7 +151,7 @@ export default {
 }
 
 .snake {
-  background-image: url('tarpins.png');
+  background-image: url('food.jpeg');
   background-size: cover;
 }
 
