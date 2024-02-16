@@ -34,7 +34,7 @@
       </div>
 
       <div class="button-container">
-        <button class="register-button" @click.prevent="handleSubmit">Register</button>
+        <button class="register-button">Register</button>
         <button class="back-button" @click.prevent="backToLogin">Back to Login</button>
       </div>
     </form>
@@ -53,7 +53,8 @@ export default {
       username: '',
       password: '',
       gender: 'male',
-      age: null
+      age: null,
+      supabase: null
     };
   },
   created() {
@@ -62,26 +63,22 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-        const { data, error } = await fetch('https://nnbuvyjitnopekbbmzme.supabase.co', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uYnV2eWppdG5vcGVrYmJtem1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgwNzEwMzIsImV4cCI6MjAyMzY0NzAzMn0.jjwC_4FURg2xwkj3-jmsDBINVutFSxNOnHUIvfHa8dE'
-          },
-          body: JSON.stringify({
-            first_name: this.firstName,
-            last_name: this.lastName,
-            email: this.email,
-            username: this.username,
-            password: this.password,
-            gender: this.gender,
-            age: this.age
-          })
-        });
-
+        const { error } = await this.supabase
+            .from('users')
+            .insert([
+              {
+                first_name: this.firstName,
+                last_name: this.lastName,
+                email: this.email,
+                username: this.username,
+                password: this.password,
+                gender: this.gender,
+                age: this.age
+              }
+            ]);
 
         if (error) {
-          throw error;
+          throw new Error(error.message);
         }
 
         console.log('User registered successfully!');
@@ -97,7 +94,9 @@ export default {
         console.error('Error registering user:', error.message);
       }
     },
-    // other methods remain the same
+    backToLogin() {
+      // Implement this if needed
+    }
   }
 };
 </script>
