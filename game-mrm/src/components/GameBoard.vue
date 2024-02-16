@@ -4,6 +4,11 @@
       <div v-for="(row, rowIndex) in board" :key="rowIndex">
         <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }"></div>
       </div>
+      <div v-if="gameOver" class="game-over">Game Over!
+        <span v-if="score > 1">Markuss drank {{ score }} lodes</span>
+        <span v-if="score === 0">Markuss didn't get any lodes</span>
+        <span v-if="score === 1">Markuss drank {{ score }} lode</span>
+      </div>
       <div class="arrow" :class="arrowDirection"></div>
     </div>
     <p>
@@ -25,9 +30,11 @@ export default {
   data() {
     return {
       board: [],
-      snake: [{ row: 10, col: 10 }],
+      snake: [{row: 10, col: 10}],
       direction: 'right',
-      food: {}
+      food: {},
+      gameOver: false,
+      score: 0
     };
   },
   computed: {
@@ -59,7 +66,7 @@ export default {
         row = Math.floor(Math.random() * 20);
         col = Math.floor(Math.random() * 20);
       } while (this.isSnake(row, col));
-      this.food = { row, col };
+      this.food = {row, col};
     },
     moveUp() {
       if (this.direction !== 'down') this.direction = 'up';
@@ -73,24 +80,24 @@ export default {
     moveRight() {
       if (this.direction !== 'left') this.direction = 'right';
     },
-      handleKeyPress(event) {
-          switch (event.key) {
-              case 'ArrowUp':
-                  this.direction = 'left';
-                  break;
-              case 'ArrowDown':
-                  this.direction = 'right';
-                  break;
-              case 'ArrowLeft':
-                  this.direction = 'up';
-                  break;
-              case 'ArrowRight':
-                  this.direction = 'down';
-                  break;
-          }
+    handleKeyPress(event) {
+      switch (event.key) {
+        case 'ArrowUp':
+          this.direction = 'left';
+          break;
+        case 'ArrowDown':
+          this.direction = 'right';
+          break;
+        case 'ArrowLeft':
+          this.direction = 'up';
+          break;
+        case 'ArrowRight':
+          this.direction = 'down';
+          break;
+      }
     },
     moveSnake() {
-      const head = { ...this.snake[0] };
+      const head = {...this.snake[0]};
       switch (this.direction) {
         case 'up':
           head.row--;
@@ -132,26 +139,24 @@ export default {
 #game-board {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(20, 2rem); /* Using rem units for better responsiveness */
+  grid-template-columns: repeat(20, 2rem);
   border: 2px solid black;
   background: lightgreen;
-  //background: linear-gradient(135deg, #9b9b9b, #fcfcfc); /* Using Tailwind CSS colors for a gradient background */
 }
 
 .cell {
-  width: 2rem; /* Using rem units for better responsiveness */
-  height: 2rem; /* Using rem units for better responsiveness */
+  width: 2rem;
+  height: 2rem;
   border: 1px solid black;
 }
 
 .snake {
-  //background-color: #48BB78; /* Green color from Tailwind CSS palette */
-  background-image: url('tarpins.png'); /* Replace 'food.png' with the path to your food image */
+  background-image: url('tarpins.png');
   background-size: cover;
 }
 
 .food {
-  background-image: url('food3.png'); /* Replace 'food.png' with the path to your food image */
+  background-image: url('food3.png');
   background-size: cover;
 }
 
@@ -159,39 +164,43 @@ export default {
   position: absolute;
   width: 0;
   height: 0;
-  border-left: 0.5rem solid transparent; /* Using rem units for better responsiveness */
-  border-right: 0.5rem solid transparent; /* Using rem units for better responsiveness */
-  border-bottom: 0.5rem solid black; /* Using rem units for better responsiveness */
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-bottom: 0.5rem solid black;
   transition: transform 0.2s;
 }
 
 .arrow-up {
-  top: -0.5rem; /* Using rem units for better responsiveness */
+  top: -0.5rem;
   left: 50%;
   transform: translateX(-50%) rotate(180deg);
 }
 
 .arrow-down {
-  bottom: -0.5rem; /* Using rem units for better responsiveness */
+  bottom: -0.5rem;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .arrow-left {
-  left: -0.5rem; /* Using rem units for better responsiveness */
+  left: -0.5rem;
   top: 50%;
   transform: translateY(-50%) rotate(90deg);
 }
 
 .arrow-right {
-  right: -0.5rem; /* Using rem units for better responsiveness */
+  right: -0.5rem;
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
 }
 
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: red;
+}
 </style>
-
-
-
-<!--jauna versija-->
-<!--jsndfnjdjsnvjn-->

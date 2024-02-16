@@ -1,6 +1,6 @@
 <template>
   <div class="register-form-container">
-    <form>
+    <form @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" v-model="firstName" required />
@@ -34,7 +34,7 @@
       </div>
 
       <div class="button-container">
-        <button class="register-button" @click.prevent="register">Register</button>
+        <button class="register-button" @click.prevent="handleSubmit">Register</button>
         <button class="back-button" @click.prevent="backToLogin">Back to Login</button>
       </div>
     </form>
@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { createClient } from '@supabase/supabase-js';
+
 export default {
   data() {
     return {
@@ -54,32 +56,48 @@ export default {
       age: null
     };
   },
+  created() {
+    this.supabase = createClient('https://nnbuvyjitnopekbbmzme.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uYnV2eWppdG5vcGVrYmJtem1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgwNzEwMzIsImV4cCI6MjAyMzY0NzAzMn0.jjwC_4FURg2xwkj3-jmsDBINVutFSxNOnHUIvfHa8dE');
+  },
   methods: {
-    register() {
-      // Implement your registration logic here
-      console.log('Registering user:', {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        username: this.username,
-        password: this.password,
-        gender: this.gender,
-        age: this.age
-      });
+    async handleSubmit() {
+      try {
+        const { data, error } = await fetch('https://nnbuvyjitnopekbbmzme.supabase.co', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uYnV2eWppdG5vcGVrYmJtem1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgwNzEwMzIsImV4cCI6MjAyMzY0NzAzMn0.jjwC_4FURg2xwkj3-jmsDBINVutFSxNOnHUIvfHa8dE'
+          },
+          body: JSON.stringify({
+            first_name: this.firstName,
+            last_name: this.lastName,
+            email: this.email,
+            username: this.username,
+            password: this.password,
+            gender: this.gender,
+            age: this.age
+          })
+        });
 
-      // Reset the form fields after registration
-      this.firstName = '';
-      this.lastName = '';
-      this.email = '';
-      this.username = '';
-      this.password = '';
-      this.gender = 'male';
-      this.age = null;
+
+        if (error) {
+          throw error;
+        }
+
+        console.log('User registered successfully!');
+        // Reset form fields
+        this.firstName = '';
+        this.lastName = '';
+        this.email = '';
+        this.username = '';
+        this.password = '';
+        this.gender = 'male';
+        this.age = null;
+      } catch (error) {
+        console.error('Error registering user:', error.message);
+      }
     },
-    backToLogin() {
-      // Trigger the backToLogin event
-      this.$emit('backToLogin');
-    }
+    // other methods remain the same
   }
 };
 </script>
