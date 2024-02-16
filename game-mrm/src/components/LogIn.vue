@@ -1,17 +1,17 @@
 <template>
   <div class="log-in-container">
-    <form @submit.prevent="login">
+    <form action="" method="POST">
       <div class="form-group">
         <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" required />
+        <input type="text" id="username" v-model="Admin.username" required />
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required />
+        <input type="password" id="password" v-model="Admin.password" required />
       </div>
 
       <div class="button-container">
-        <button class="login-button">Login</button>
+        <button class="login-button" @click.prevent="login()">Login</button>
         <button class="register-button" @click.prevent="goToRegister">Register</button>
       </div>
     </form>
@@ -19,42 +19,41 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
+  name: "LogIn",
   data() {
     return {
-      username: '',
-      password: ''
+      Admin: {
+        username: null,
+        password: null
+      }
     };
   },
   methods: {
-    async login() {
-      try {
-        const response = await fetch('login.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            username: this.username,
-            password: this.password
+    login() {
+      const formData = new FormData();
+      formData.append("username", this.Admin.username);
+      formData.append("password", this.Admin.password);
+      axios.post("http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=login", formData)
+          .then(response => {
+            console.log(response.data);
+            alert("login successful!");
+            this.$router.push({ path: '/' })
+            this.$router.push({name: 'game'});
           })
-        });
-        const data = await response.json();
-        if (data.success) {
-          // Successful login, redirect or perform any necessary action
-          console.log('Login successful');
-        } else {
-          console.log('Login failed');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
+          .catch(error => {
+            console.error(error);
+            alert("login failed. Please try again.");
+          });
     },
-    goToRegister() {
-      // Trigger the goToRegister event
-      this.$emit('goToRegister');
+
+    goToRegister(){
+      this.$router.push({ path: '/' })
+      this.$router.push({name: 'register'});
     }
   }
+
 };
 </script>
 

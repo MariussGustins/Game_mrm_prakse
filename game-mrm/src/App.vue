@@ -1,44 +1,28 @@
 <template>
   <div id="app">
-    <LogIn v-if="!loggedIn" @login="handleLogin" @goToRegister="showRegister" />
-    <GameBoard v-if="loggedIn" />
-    <RegisterForm v-if="showRegisterForm" @backToLogin="backToLogin" />
+    <router-view />
   </div>
 </template>
 
 <script>
+import { createRouter } from 'vue-router'
 import LogIn from './components/LogIn.vue';
 import GameBoard from './components/GameBoard.vue';
 import RegisterForm from './components/RegisterForm.vue';
+
+const routes = [
+  { path: '/', component: LogIn },
+  { path: '/game', component: GameBoard },
+  { path: '/register', component: RegisterForm }
+];
+
+const router = new createRouter({
+  routes
+});
+
 export default {
   name: 'App',
-  data() {
-    return {
-      loggedIn: false,
-      gameOver: false,
-      score: 0,
-      showRegisterForm: false,
-    };
-  },
-    methods: {
-      handleLogin() {
-        console.log('Login successful');
-        this.loggedIn = true;
-        this.showRegisterForm = false;
-      },
-      showRegister() {
-        this.showRegisterForm = true;
-      },
-      backToLogin() {
-        this.loggedIn = false;
-        this.showRegisterForm = false;
-      }
-    },
-    components: {
-      LogIn,
-      GameBoard,
-      RegisterForm
-    }
+  router
 };
 </script>
 
