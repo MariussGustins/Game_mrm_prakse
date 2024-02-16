@@ -42,38 +42,7 @@
 </template>
 
 <script>
-export default {
-  mounted() {
-    const { createClient } = supabase;
-    let supabase = createClient("https://nnbuvyjitnopekbbmzme.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uYnV2eWppdG5vcGVrYmJtem1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgwNzEwMzIsImV4cCI6MjAyMzY0NzAzMn0.jjwC_4FURg2xwkj3-jmsDBINVutFSxNOnHUIvfHa8dE");
 
-    const form = document.querySelector('#contact-form');
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      const formInputs = form.querySelectorAll('input, select');
-
-      let submission = {};
-
-      formInputs.forEach(element => {
-        const { value, name } = element;
-        if (value) {
-          submission[name] = value;
-        }
-      });
-
-      const { error } = await supabase.from('register_data').insert([submission], { returning: 'minimal' });
-
-      if (error) {
-        alert('There was an error, please try again');
-      } else {
-        alert('Thanks for contacting us');
-      }
-
-      formInputs.forEach(element => element.value = '');
-    });
-  }
-};
 </script>
 
 <style scoped>
