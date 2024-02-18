@@ -56,6 +56,7 @@ export default {
           .then(response => {
             console.log(response.data);
             alert("Registration successful!");
+            this.$router.push({path: '/'});
           })
           .catch(error => {
             console.error(error);

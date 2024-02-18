@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     data() {
         return {
@@ -157,13 +158,34 @@ export default {
                 this.handleGameOver();
             }
         },
-        handleGameOver() {
-            if (this.score > this.highestScore) {
-                this.highestScore = this.score;
-            }
-            window.removeEventListener('keydown', this.handleKeyPress);
-        },
-        gameLoop() {
+      handleGameOver() {
+        if (this.score > this.highestScore) {
+          this.highestScore = this.score;
+        }
+        // Create a FormData object to send data to the API
+        const formData = new FormData();
+        formData.append("score", this.score);
+        formData.append("best_result", this.highestScore);
+        formData.append("logusername", this.loggedInUser);
+
+        // Send a POST request to the API endpoint
+        axios.post("http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=save_score", formData)
+            .then(response => {
+              console.log("Received data:", response.data);
+              // Update highest score if necessary
+              if (!response.data.error && response.data.highestScore) {
+                this.highestScore = response.data.highestScore;
+              }
+            })
+            .catch(error => {
+              console.error("Error:", error);
+            });
+
+        // Remove event listener for keydown events
+        window.removeEventListener('keydown', this.handleKeyPress);
+      },
+
+      gameLoop() {
             setInterval(() => {
                 if (!this.gameOver) {
                     this.moveSnake();

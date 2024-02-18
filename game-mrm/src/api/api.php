@@ -49,6 +49,7 @@ if($action=='register'){
 
 }
 
+
 if($action=='login'){
     $username=$_POST['username'];
     $password=$_POST['password'];
@@ -78,6 +79,62 @@ if($action=='login'){
         $res['message']="Your Login Username or Password is invalid";
     }
 }
+if ($action == 'save_score') {
+    // Retrieve the score, best_result, and username from the request
+    $score = $_POST['score'];
+    $best_result = $_POST['best_result'];
+    $logusername = $_POST['logusername'];
+
+    echo "Received data: score - $score, best_result - $best_result, username - $logusername";
+
+    // Fetch user ID from database using the session username
+    $query = "SELECT id FROM users WHERE username = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $logusername);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $user_id = $row['id'];
+
+        // Check if the user has an existing record in user_scores
+        $query = "SELECT * FROM user_scores WHERE user_id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $existing_result = $stmt->get_result();
+
+        if ($existing_result->num_rows > 0) {
+            // Update the existing record with the new score and best result
+            $query = "UPDATE user_scores SET score = ?, best_result = ? WHERE user_id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("iii", $score, $best_result, $user_id);
+            $stmt->execute();
+        } else {
+            // Insert a new record for the user's score
+            $query = "INSERT INTO user_scores (user_id, score, best_result) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("iii", $user_id, $score, $best_result);
+            $stmt->execute();
+        }
+
+        // Return response indicating successful score insertion or update
+        $response = array('error' => false, 'message' => 'Score saved successfully');
+        echo json_encode($response);
+        exit();
+    } else {
+        // If the user is not found, return an error message
+        echo json_encode(array('error' => true, 'message' => 'User not found'));
+        exit();
+    }
+}
+
+
+
+
+
+
 if ($action == 'check_login') {
     session_start(); // Start the session
     $res['logged_in'] = isset($_SESSION['username']);
