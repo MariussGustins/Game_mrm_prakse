@@ -1,11 +1,6 @@
 <template>
     <div>
         <div>
-            <!-- Buttons -->
-            <button @click="startGame">Start</button>
-            <button @click="restartGame">Restart</button>
-            <button @click="openShop">Shop</button>
-            <button @click="logout()">Logout</button>
 
             <!-- Game board -->
             <div id="game-board">
@@ -19,6 +14,11 @@
             </div>
             <div class="arrow" :class="arrowDirection"></div>
         </div>
+          <!-- Buttons -->
+          <button class="button" @click="startGame">Start</button>
+          <button class="button" @click="restartGame">Restart</button>
+          <button class="button" @click="openShop">Shop</button>
+          <button class="button" @click="logout()">Logout</button>
 
             <!-- Player's data section -->
           <div class="player-data">
@@ -28,14 +28,14 @@
             <p>Current Snake Skin: {{ currentSnakeSkin }}</p>
           </div>
 
-            <!-- Shop popup -->
-            <div v-if="showShop" class="shop-popup">
-                <div v-for="(skin, index) in skins" :key="index">
-                    <img :src="skin.image" alt="Skin" @click="selectSkin(index)" />
-                    <p>Cost: {{ skin.cost }} points</p>
-                </div>
-                <button @click="closeShop">Close</button>
+          <!-- Shop popup -->
+          <div v-if="showShop" ref="shopPopup" class="shop-popup">
+            <div v-for="(skin, index) in skins" :key="index">
+              <img :src="skin.image" alt="Skin" @click="selectSkin(index)" />
+              <p>Cost: {{ skin.cost }} points</p>
             </div>
+            <button @click="closeShop">Close</button>
+          </div>
         </div>
     </div>
 </template>
@@ -215,10 +215,16 @@ export default {
             this.startGame();
         },
         openShop() {
-            this.showShop = true;
+          this.showShop = true;
+          setTimeout(() => {
+            this.$refs.shopPopup.classList.add('active');
+          }, 50); // Adjust the delay as needed
         },
         closeShop() {
+          this.$refs.shopPopup.classList.remove('active');
+          setTimeout(() => {
             this.showShop = false;
+          }, 300); // Match the transition duration
         },
         selectSkin(index) {
             const selectedSkin = this.skins[index];
@@ -253,13 +259,14 @@ export default {
 }
 
 .snake {
-    background-image: url('food3.png'); /* Default snake skin */
+    background-image: url('food.jpeg'); /* Default snake skin */
     background-size: cover;
 }
 
 
 .food {
-    background-color: red;
+    background-image: url("food3.png");
+  background-size: cover;
 }
 
 .arrow {
@@ -308,14 +315,44 @@ export default {
 }
 
 .shop-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    z-index: 999;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  z-index: 999;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.shop-popup.active {
+  opacity: 1;
+}
+.button {
+  margin: 20px;
+  display: inline-block;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Add styles for shop content as needed */
