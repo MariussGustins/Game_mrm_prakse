@@ -5,7 +5,7 @@
             <button @click="startGame">Start</button>
             <button @click="restartGame">Restart</button>
             <button @click="openShop">Shop</button>
-            <button @click="logout">Logout</button>
+            <button @click="logout()">Logout</button>
 
             <!-- Game board -->
             <div id="game-board">
@@ -21,11 +21,12 @@
         </div>
 
             <!-- Player's data section -->
-            <div class="player-data">
-                <p>Score: {{ score }}</p>
-                <p>Highest Score: {{ highestScore }}</p>
-                <p>Current Snake Skin: {{ currentSnakeSkin }}</p>
-            </div>
+          <div class="player-data">
+            <p>Username: {{ loggedInUser }}</p>
+            <p>Score: {{ score }}</p>
+            <p>Highest Score: {{ highestScore }}</p>
+            <p>Current Snake Skin: {{ currentSnakeSkin }}</p>
+          </div>
 
             <!-- Shop popup -->
             <div v-if="showShop" class="shop-popup">
@@ -43,6 +44,7 @@
 export default {
     data() {
         return {
+            loggedInUser: '',
             board: [],
             snake: [], // Initialize as an empty array
             direction: 'right',
@@ -57,6 +59,7 @@ export default {
             ],
             currentSnakeSkin: 'food3.png', // default skin image
             highestScore: 0,
+
         };
     },
     computed: {
@@ -68,6 +71,14 @@ export default {
         this.setupBoard();
         this.placeFood();
         window.addEventListener('keydown', this.handleKeyPress);
+
+      const sessionUsername = sessionStorage.getItem('username');
+      if (sessionUsername) {
+        this.loggedInUser = sessionUsername;
+      } else {
+        this.loggedInUser = 'User not logged in';
+      }
+
     },
     methods: {
         setupBoard() {
@@ -198,8 +209,7 @@ export default {
             }
         },
         logout() {
-            // Add any logic needed for user logout
-            // Redirect to the login page or perform other logout actions
+          this.$router.push({path: '/'});
         },
     },
 };

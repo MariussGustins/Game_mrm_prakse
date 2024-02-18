@@ -39,6 +39,9 @@ export default {
           .then(response => {
             console.log(response.data);
             alert("login successful!");
+
+            sessionStorage.setItem('username', this.Admin.username);
+
             this.$router.push({path: '/game'});
           })
           .catch(error => {

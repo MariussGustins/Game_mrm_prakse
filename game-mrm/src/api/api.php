@@ -1,6 +1,8 @@
 <?php
 global $conn;
 include "./db.php";
+
+
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
     // you want to allow, and if so:
@@ -54,6 +56,21 @@ if($action=='login'){
     $result=$conn->query($sql);
     $num=mysqli_num_rows($result);
     if($num > 0){
+        // Retrieve the username from the session
+        $loggedInUser = $_SESSION['username'];
+
+// Fetch the username from the database
+        $sqlUsername = "SELECT username FROM users WHERE username = '$loggedInUser'";
+        $resultUsername = $conn->query($sqlUsername);
+
+        if ($resultUsername->num_rows > 0) {
+            // Fetch the username from the result
+            $row = $resultUsername->fetch_assoc();
+            $usernameFromDatabase = $row['username'];
+        } else {
+            $usernameFromDatabase = "Guest"; // Default to Guest if username not found
+        }
+
         $res['message']="Login Successfuly";
     }
     else{
@@ -61,4 +78,16 @@ if($action=='login'){
         $res['message']="Your Login Username or Password is invalid";
     }
 }
+if ($action == 'check_login') {
+    session_start(); // Start the session
+    $res['logged_in'] = isset($_SESSION['username']);
+    if ($res['logged_in']) {
+        $res['username'] = $_SESSION['username']; // Send username if logged in
+    }
+    // Send response
+    header('Content-Type: application/json');
+    echo json_encode($res);
+    exit();
+}
+
 ?>
