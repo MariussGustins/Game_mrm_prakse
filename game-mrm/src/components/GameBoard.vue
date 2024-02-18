@@ -1,43 +1,67 @@
 <template>
-    <div>
-        <div>
-
-            <!-- Game board -->
-            <div id="game-board">
-            <div v-for="(row, rowIndex) in board" :key="rowIndex">
-                <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }"></div>
-            </div>
-            <div v-if="gameOver" class="game-over">Game Over!
-                <span v-if="score > 1">You got {{ score }} points</span>
-                <span v-if="score === 0">You didn't get any point</span>
-                <span v-if="score === 1">You got {{ score }} point</span>
-            </div>
-            <div class="arrow" :class="arrowDirection"></div>
-        </div>
-          <!-- Buttons -->
-          <button class="button" @click="startGame">Start</button>
-          <button class="button" @click="restartGame">Restart</button>
-          <button class="button" @click="openShop">Shop</button>
-          <button class="button" @click="logout()">Logout</button>
-
-            <!-- Player's data section -->
-          <div class="player-data">
-            <p>Username: {{ loggedInUser }}</p>
-            <p>Score: {{ score }}</p>
-            <p>Highest Score: {{ highestScore }}</p>
-            <p>Current Snake Skin: {{ currentSnakeSkin }}</p>
-          </div>
-
-          <!-- Shop popup -->
-          <div v-if="showShop" ref="shopPopup" class="shop-popup">
-            <div v-for="(skin, index) in skins" :key="index">
-              <img :src="skin.image" alt="Skin" @click="selectSkin(index)" />
-              <p>Cost: {{ skin.cost }} points</p>
-            </div>
-            <button @click="closeShop">Close</button>
+  <div>
+    <div class="container">
+      <!-- Game board -->
+      <div id="game-board">
+        <div v-for="(row, rowIndex) in board" :key="rowIndex">
+          <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }">
+            <!-- Apply inline style binding here for the snake's background image -->
+            <div :style="{ backgroundImage: 'url(' + require(`@/assets/${currentSnakeSkin}`) + ')' }"></div>
           </div>
         </div>
+        <!-- Game Over popup -->
+        <div v-if="gameOver" ref="gameOverPopup" class="game-over-popup">
+          <div>
+            Game Over!
+            <span v-if="score > 1">You got {{ score }} points</span>
+            <span v-else-if="score === 0">You didn't get any point</span>
+            <span v-else>You got {{ score }} point</span>
+          </div>
+          <div class="button-container">
+            <button @click="restartGame">Restart</button>
+            <button @click="closeGameOverPopup">Close</button>
+          </div>
+        </div>
+        <div class="arrow" :class="arrowDirection"></div>
+      </div>
+      <!-- Player's data section -->
+      <div class="player-data">
+        <div class="player-data-header">Player Data</div>
+        <div class="player-data-info">
+          <div class="info-item">
+            <span class="info-label">Username:</span>
+            <span class="info-value">{{ loggedInUser }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Score:</span>
+            <span class="info-value">{{ score }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Highest Score:</span>
+            <span class="info-value">{{ highestScore }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Current Snake Skin:</span>
+            <img :src="require(`@/assets/${currentSnakeSkin}`)" alt="Snake Skin" class="snake-skin-img">
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- Buttons -->
+    <button class="button" @click="startGame">Start</button>
+    <button class="button" @click="restartGame">Restart</button>
+    <button class="button" @click="openShop">Shop</button>
+    <button class="button" @click="logout()">Logout</button>
+
+    <!-- Shop popup -->
+    <div v-if="showShop" ref="shopPopup" class="shop-popup">
+      <div v-for="(skin, index) in skins" :key="index">
+        <img :src="require(`@/assets/${skin.image}`)" alt="Skin" class="snake-skin-img" @click="selectSkin(index)" />
+        <p>Cost: {{ skin.cost }} points</p>
+      </div>
+      <button class="button" @click="closeShop">Close</button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -54,11 +78,11 @@ export default {
             score: 0,
             showShop: false,
             skins: [
-                { image: 'food.jpeg', cost: 5 },
-                { image: 'skin2.png', cost: 20 },
+                { image: 'food2.png', cost: 5 },
+                { image: 'logo.png', cost: 20 },
                 // Add more skins as needed
             ],
-            currentSnakeSkin: 'food3.png', // default skin image
+            currentSnakeSkin: 'food.jpeg', // default skin image
             highestScore: 0,
 
         };
@@ -66,7 +90,10 @@ export default {
     computed: {
         arrowDirection() {
             return 'arrow-' + this.direction;
-        }
+        },
+        currentSnakeSkinImageUrl() {
+          return require(`@/assets/${this.currentSnakeSkin}`);
+      }
     },
     mounted() {
         this.setupBoard();
@@ -183,6 +210,15 @@ export default {
 
         // Remove event listener for keydown events
         window.removeEventListener('keydown', this.handleKeyPress);
+        this.gameOver = true;
+        setTimeout(() => {
+          this.$refs.gameOverPopup.classList.add('active');
+        }, 50); // Adjust the delay as needed
+      },
+      closeGameOverPopup() {
+        // Hide game over popup
+        this.$refs.gameOverPopup.classList.remove('active');
+        // Remove 'active' class from the game over popup
       },
 
       gameLoop() {
@@ -196,7 +232,7 @@ export default {
             this.gameOver = false;
             this.score = 0;
             this.snake = [{row: 10, col: 10}]; // Reset the snake length
-            this.currentSnakeSkin = 'food3.png';
+            this.currentSnakeSkin = 'food.jpeg';
             this.setupBoard();
             this.placeFood();
             if (this.gameLoopInterval) {
@@ -226,15 +262,15 @@ export default {
             this.showShop = false;
           }, 300); // Match the transition duration
         },
-        selectSkin(index) {
-            const selectedSkin = this.skins[index];
-            if (this.score >= selectedSkin.cost) {
-                this.currentSnakeSkin = selectedSkin.image;
-                this.score -= selectedSkin.cost;
-                this.closeShop();
-            } else {
-                alert("You don't have enough points to purchase this skin!");
-            }
+      selectSkin(index) {
+        const selectedSkin = this.skins[index];
+        if (this.score >= selectedSkin.cost) {
+          this.currentSnakeSkin = selectedSkin.image; // Update the current snake skin
+          this.score -= selectedSkin.cost;
+          this.closeShop();
+        } else {
+          alert("You don't have enough points to purchase this skin!");
+        }
         },
         logout() {
           this.$router.push({path: '/'});
@@ -244,28 +280,35 @@ export default {
 </script>
 
 <style scoped>
+
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
 #game-board {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(20, 20px);
-    border: 2px solid black;
-    background: lightgreen;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(20, 30px);
+  border: 5px solid #393e46;
+  background-color: #222831;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  margin-left:60px;
 }
 
 .cell {
-    width: 20px;
-    height: 20px;
-    border: 1px solid gray;
+  width: 30px; /* Original size */
+  height: 30px; /* Original size */
+  border: 2px solid #393e46; /* Border for each cell */
 }
 
 .snake {
-    background-image: url('food.jpeg'); /* Default snake skin */
-    background-size: cover;
+  background-image: url('../assets/food.jpeg');
+  background-size: cover;
 }
 
-
 .food {
-    background-image: url("food3.png");
+    background-image: url("../assets/food3.png");
   background-size: cover;
 }
 
@@ -306,13 +349,40 @@ export default {
 /* ... existing styles ... */
 
 .player-data {
-    position: absolute;
-    top: 100px;
-    right: 35px;
-    text-align: center;
-    color: white;
-    font-size: 16px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 40px;
+  margin-right: 70px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+.player-data-header {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.player-data-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+}
+
+.info-label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.info-value {
+  color: #555;
+}
+
 
 .shop-popup {
   position: fixed;
@@ -333,7 +403,7 @@ export default {
 .button {
   margin: 20px;
   display: inline-block;
-  background-color: #4CAF50;
+  background-color: #222831;
   border: none;
   color: white;
   text-align: center;
@@ -347,13 +417,72 @@ export default {
 }
 
 .button:hover {
-  background-color: #45a049;
+  background-color: #222831;
 }
 
 .button:active {
-  background-color: #3e8e41;
+  background-color: #222831;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.game-over-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f0f0f0;
+  color: #222831;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 999;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.game-over-popup.active {
+  opacity: 1;
+}
+
+.game-over-popup span {
+  display: block;
+  margin-top: 10px;
+}
+
+.game-over-popup button {
+  background-color: #222831;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.game-over-popup button:hover {
+  background-color: #222831;
+}
+
+.game-over-popup button:active {
+  background-color: #222831;
+}
+
+.button-container {
+  margin-top: 20px;
+}
+
+.game-over-popup .button-container button {
+  margin-right: 10px;
+}
+
+.snake-skin-img {
+  max-width: 40px; /* Adjust the max width as needed */
+  max-height: 40px; /* Adjust the max height as needed */
+}
+
+
 
 /* Add styles for shop content as needed */
 </style>
