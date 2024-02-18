@@ -1,4 +1,5 @@
 <?php
+global $conn;
 include "./db.php";
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one

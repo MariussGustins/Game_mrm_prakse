@@ -12,7 +12,7 @@
 
       <div class="button-container">
         <button class="login-button" @click.prevent="login()">Login</button>
-        <button class="register-button" @click.prevent="goToRegister">Register</button>
+        <button class="register-button" @click.prevent="goToRegister()">Register</button>
       </div>
     </form>
   </div>
@@ -39,8 +39,7 @@ export default {
           .then(response => {
             console.log(response.data);
             alert("login successful!");
-            this.$router.push({ path: '/' })
-            this.$router.push({name: 'game'});
+            this.$router.push({path: '/game'});
           })
           .catch(error => {
             console.error(error);
@@ -49,8 +48,7 @@ export default {
     },
 
     goToRegister(){
-      this.$router.push({ path: '/' })
-      this.$router.push({name: 'register'});
+      this.$router.push({path: '/register'});
     }
   }
 
