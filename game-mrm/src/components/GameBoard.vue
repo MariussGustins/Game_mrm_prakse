@@ -268,9 +268,9 @@ export default {
 
 .player-data {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    text-align: right;
+    top: 100px;
+    right: 35px;
+    text-align: center;
     color: white;
     font-size: 16px;
 }
