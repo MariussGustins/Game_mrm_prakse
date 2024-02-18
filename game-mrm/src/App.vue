@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import { createRouter } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'; // Import createWebHashHistory
+
 import LogIn from './components/LogIn.vue';
 import GameBoard from './components/GameBoard.vue';
 import RegisterForm from './components/RegisterForm.vue';
@@ -16,7 +17,8 @@ const routes = [
   { path: '/register', component: RegisterForm }
 ];
 
-const router = new createRouter({
+const router = createRouter({
+  history: createWebHashHistory(), // Add createWebHashHistory here
   routes
 });
 
