@@ -280,8 +280,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .container {
   display: flex;
   justify-content: space-between;
@@ -345,8 +343,6 @@ export default {
     top: 50%;
     transform: translateY(-50%) rotate(-90deg);
 }
-
-/* ... existing styles ... */
 
 .player-data {
   background-color: #f0f0f0;
@@ -481,8 +477,4 @@ export default {
   max-width: 40px; /* Adjust the max width as needed */
   max-height: 40px; /* Adjust the max height as needed */
 }
-
-
-
-/* Add styles for shop content as needed */
 </style>
