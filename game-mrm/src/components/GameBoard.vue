@@ -1,67 +1,73 @@
 <template>
-  <div>
-    <div class="container">
-      <!-- Game board -->
-      <div id="game-board">
-        <div v-for="(row, rowIndex) in board" :key="rowIndex">
-          <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }">
-            <!-- Apply inline style binding here for the snake's background image -->
-            <div :style="{ backgroundImage: 'url(' + require(`@/assets/${currentSnakeSkin}`) + ')' }"></div>
-          </div>
-        </div>
-        <!-- Game Over popup -->
-        <div v-if="gameOver" ref="gameOverPopup" class="game-over-popup">
-          <div>
-            Game Over!
-            <span v-if="score > 1">You got {{ score }} points</span>
-            <span v-else-if="score === 0">You didn't get any point</span>
-            <span v-else>You got {{ score }} point</span>
-          </div>
-          <div class="button-container">
-            <button @click="restartGame">Restart</button>
-            <button @click="closeGameOverPopup">Close</button>
-          </div>
-        </div>
-        <div class="arrow" :class="arrowDirection"></div>
-      </div>
-      <!-- Player's data section -->
-      <div class="player-data">
-        <div class="player-data-header">Player Data</div>
-        <div class="player-data-info">
-          <div class="info-item">
-            <span class="info-label">Username:</span>
-            <span class="info-value">{{ loggedInUser }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Score:</span>
-            <span class="info-value">{{ score }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Highest Score:</span>
-            <span class="info-value">{{ highestScore }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Current Snake Skin:</span>
-            <img :src="require(`@/assets/${currentSnakeSkin}`)" alt="Snake Skin" class="snake-skin-img">
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Buttons -->
-    <button class="button" @click="startGame">Start</button>
-    <button class="button" @click="restartGame">Restart</button>
-    <button class="button" @click="openShop">Shop</button>
-    <button class="button" @click="logout()">Logout</button>
+    <div>
+        <div class="container">
+            <!-- Game board -->
+            <div id="game-board">
+                <div v-for="(row, rowIndex) in board" :key="rowIndex">
+                    <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }">
+                        <!-- Apply inline style binding here for the snake's background image -->
+                        <div
+                            v-if="isSnake(rowIndex, colIndex)"
+                            :style="{ backgroundImage: 'url(' + require(`@/assets/${currentSnakeSkin}`) + ')' }"
+                            class="snake-cell"
+                        ></div>
 
-    <!-- Shop popup -->
-    <div v-if="showShop" ref="shopPopup" class="shop-popup">
-      <div v-for="(skin, index) in skins" :key="index">
-        <img :src="require(`@/assets/${skin.image}`)" alt="Skin" class="snake-skin-img" @click="selectSkin(index)" />
-        <p>Cost: {{ skin.cost }} points</p>
-      </div>
-      <button class="button" @click="closeShop">Close</button>
+<!--                        <div :style="{ backgroundImage: 'url(' + require(`@/assets/${currentSnakeSkin}`) + ')' }"></div>-->
+                    </div>
+                </div>
+                <!-- Game Over popup -->
+                <div v-if="gameOver" ref="gameOverPopup" class="game-over-popup">
+                    <div>
+                        Game Over!
+                        <span v-if="score > 1">You got {{ score }} points</span>
+                        <span v-else-if="score === 0">You didn't get any point</span>
+                        <span v-else>You got {{ score }} point</span>
+                    </div>
+                    <div class="button-container">
+                        <button @click="restartGame">Restart</button>
+                        <button @click="closeGameOverPopup">Close</button>
+                    </div>
+                </div>
+                <div class="arrow" :class="arrowDirection"></div>
+            </div>
+            <!-- Player's data section -->
+            <div class="player-data">
+                <div class="player-data-header">Player Data</div>
+                <div class="player-data-info">
+                    <div class="info-item">
+                        <span class="info-label">Username:</span>
+                        <span class="info-value">{{ loggedInUser }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Score:</span>
+                        <span class="info-value">{{ score }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Highest Score:</span>
+                        <span class="info-value">{{ highestScore }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Current Snake Skin:</span>
+                        <img :src="require(`@/assets/${currentSnakeSkin}`)" alt="Snake Skin" class="snake-skin-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Buttons -->
+        <button class="button" @click="startGame">Start</button>
+        <button class="button" @click="restartGame">Restart</button>
+        <button class="button" @click="openShop">Shop</button>
+        <button class="button" @click="logout()">Logout</button>
+
+        <!-- Shop popup -->
+        <div v-if="showShop" ref="shopPopup" class="shop-popup">
+            <div v-for="(skin, index) in skins" :key="index">
+                <img :src="require(`@/assets/${skin.image}`)" alt="Skin" class="snake-skin-img" @click="selectSkin(index)" />
+                <p>Cost: {{ skin.cost }} points</p>
+            </div>
+            <button class="button" @click="closeShop">Close</button>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -78,7 +84,8 @@ export default {
             score: 0,
             showShop: false,
             skins: [
-                { image: 'food2.png', cost: 5 },
+                {image: 'food.jpeg', cost: 0 },
+                { image: 'food2.png', cost: 1 },
                 { image: 'logo.png', cost: 20 },
                 // Add more skins as needed
             ],
@@ -92,25 +99,25 @@ export default {
             return 'arrow-' + this.direction;
         },
         currentSnakeSkinImageUrl() {
-          return require(`@/assets/${this.currentSnakeSkin}`);
-      }
+            return require(`@/assets/${this.currentSnakeSkin}`);
+        }
     },
     mounted() {
         this.setupBoard();
         this.placeFood();
         window.addEventListener('keydown', this.handleKeyPress);
 
-      const sessionUsername = sessionStorage.getItem('username');
-      if (sessionUsername) {
-        this.loggedInUser = sessionUsername;
-      } else {
-        this.loggedInUser = 'User not logged in';
-      }
+        const sessionUsername = sessionStorage.getItem('username');
+        if (sessionUsername) {
+            this.loggedInUser = sessionUsername;
+        } else {
+            this.loggedInUser = 'User not logged in';
+        }
 
     },
     methods: {
         setupBoard() {
-          this.board = []; //pievienoju sito
+            this.board = []; //pievienoju sito
             for (let i = 0; i < 20; i++) {
                 this.board.push(new Array(20).fill(0));
             }
@@ -185,43 +192,43 @@ export default {
                 this.handleGameOver();
             }
         },
-      handleGameOver() {
-        if (this.score > this.highestScore) {
-          this.highestScore = this.score;
-        }
-        // Create a FormData object to send data to the API
-        const formData = new FormData();
-        formData.append("score", this.score);
-        formData.append("best_result", this.highestScore);
-        formData.append("logusername", this.loggedInUser);
+        handleGameOver() {
+            if (this.score > this.highestScore) {
+                this.highestScore = this.score;
+            }
+            // Create a FormData object to send data to the API
+            const formData = new FormData();
+            formData.append("score", this.score);
+            formData.append("best_result", this.highestScore);
+            formData.append("logusername", this.loggedInUser);
 
-        // Send a POST request to the API endpoint
-        axios.post("http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=save_score", formData)
-            .then(response => {
-              console.log("Received data:", response.data);
-              // Update highest score if necessary
-              if (!response.data.error && response.data.highestScore) {
-                this.highestScore = response.data.highestScore;
-              }
-            })
-            .catch(error => {
-              console.error("Error:", error);
-            });
+            // Send a POST request to the API endpoint
+            axios.post("http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=save_score", formData)
+                .then(response => {
+                    console.log("Received data:", response.data);
+                    // Update highest score if necessary
+                    if (!response.data.error && response.data.highestScore) {
+                        this.highestScore = response.data.highestScore;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
 
-        // Remove event listener for keydown events
-        window.removeEventListener('keydown', this.handleKeyPress);
-        this.gameOver = true;
-        setTimeout(() => {
-          this.$refs.gameOverPopup.classList.add('active');
-        }, 50); // Adjust the delay as needed
-      },
-      closeGameOverPopup() {
-        // Hide game over popup
-        this.$refs.gameOverPopup.classList.remove('active');
-        // Remove 'active' class from the game over popup
-      },
+            // Remove event listener for keydown events
+            window.removeEventListener('keydown', this.handleKeyPress);
+            this.gameOver = true;
+            setTimeout(() => {
+                this.$refs.gameOverPopup.classList.add('active');
+            }, 50); // Adjust the delay as needed
+        },
+        closeGameOverPopup() {
+            // Hide game over popup
+            this.$refs.gameOverPopup.classList.remove('active');
+            // Remove 'active' class from the game over popup
+        },
 
-      gameLoop() {
+        gameLoop() {
             setInterval(() => {
                 if (!this.gameOver) {
                     this.moveSnake();
@@ -232,8 +239,7 @@ export default {
             this.gameOver = false;
             this.score = 0;
             this.snake = [{row: 10, col: 10}]; // Reset the snake length
-            this.currentSnakeSkin = 'food.jpeg';
-            this.setupBoard();
+            this.currentSnakeSkin = this.skins.find(skin => skin.image === this.currentSnakeSkin)?.image || this.skins[0].image;            this.setupBoard();
             this.placeFood();
             if (this.gameLoopInterval) {
                 clearInterval(this.gameLoopInterval);
@@ -251,63 +257,70 @@ export default {
             this.startGame();
         },
         openShop() {
-          this.showShop = true;
-          setTimeout(() => {
-            this.$refs.shopPopup.classList.add('active');
-          }, 50); // Adjust the delay as needed
+            this.showShop = true;
+            setTimeout(() => {
+                this.$refs.shopPopup.classList.add('active');
+            }, 50); // Adjust the delay as needed
         },
         closeShop() {
-          this.$refs.shopPopup.classList.remove('active');
-          setTimeout(() => {
-            this.showShop = false;
-          }, 300); // Match the transition duration
+            this.$refs.shopPopup.classList.remove('active');
+            setTimeout(() => {
+                this.showShop = false;
+            }, 300); // Match the transition duration
         },
-      selectSkin(index) {
-        const selectedSkin = this.skins[index];
-        if (this.highestScore >= selectedSkin.cost) {
-          this.currentSnakeSkin = selectedSkin.image; // Update the current snake skin
-          // this.score -= selectedSkin.cost;
-          this.closeShop();
-        } else {
-          alert("You don't have enough points to purchase this skin!");
-        }
+        selectSkin(index) {
+            const selectedSkin = this.skins[index];
+            if (this.highestScore >= selectedSkin.cost) {
+                this.currentSnakeSkin = selectedSkin.image; // Update the current snake skin
+                // this.score -= selectedSkin.cost;
+                this.closeShop();
+            } else {
+                alert("You don't have enough points to purchase this skin!");
+            }
         },
         logout() {
-          this.$router.push({path: '/'});
+            this.$router.push({path: '/'});
         },
     },
 };
 </script>
 
 <style scoped>
+.snake-cell {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #393e46;
+    background-size: cover;
+}
+
 .container {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 #game-board {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(20, 30px);
-  border: 5px solid #393e46;
-  background-color: #222831;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  margin-left:60px;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(20, 30px);
+    border: 5px solid #393e46;
+    background-color: #222831;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-left:60px;
 }
 
 .cell {
-  width: 30px; /* Original size */
-  height: 30px; /* Original size */
-  border: 2px solid #393e46; /* Border for each cell */
+    width: 30px; /* Original size */
+    height: 30px; /* Original size */
+    border: 2px solid #393e46; /* Border for each cell */
 }
 
 .snake {
-  background-image: url('../assets/food.jpeg');
-  background-size: cover;
+    background-image: url('../assets/food.jpeg');
+    background-size: cover;
 }
 
 .food {
     background-image: url("../assets/food3.png");
-  background-size: cover;
+    background-size: cover;
 }
 
 .arrow {
@@ -345,136 +358,136 @@ export default {
 }
 
 .player-data {
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 40px;
-  margin-right: 70px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 40px;
+    margin-right: 70px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .player-data-header {
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .player-data-info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
 .info-item {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .info-label {
-  font-weight: bold;
-  margin-right: 10px;
+    font-weight: bold;
+    margin-right: 10px;
 }
 
 .info-value {
-  color: #555;
+    color: #555;
 }
 
 
 .shop-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  z-index: 999;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    z-index: 999;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .shop-popup.active {
-  opacity: 1;
+    opacity: 1;
 }
 .button {
-  margin: 20px;
-  display: inline-block;
-  background-color: #222831;
-  border: none;
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    display: inline-block;
+    background-color: #222831;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .button:hover {
-  background-color: #222831;
+    background-color: #222831;
 }
 
 .button:active {
-  background-color: #222831;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #222831;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .game-over-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #f0f0f0;
-  color: #222831;
-  padding: 20px;
-  border-radius: 10px;
-  z-index: 999;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f0f0f0;
+    color: #222831;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 999;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .game-over-popup.active {
-  opacity: 1;
+    opacity: 1;
 }
 
 .game-over-popup span {
-  display: block;
-  margin-top: 10px;
+    display: block;
+    margin-top: 10px;
 }
 
 .game-over-popup button {
-  background-color: #222831;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s;
-  margin-top: 20px;
+    background-color: #222831;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin-top: 20px;
 }
 
 .game-over-popup button:hover {
-  background-color: #222831;
+    background-color: #222831;
 }
 
 .game-over-popup button:active {
-  background-color: #222831;
+    background-color: #222831;
 }
 
 .button-container {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .game-over-popup .button-container button {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .snake-skin-img {
-  max-width: 40px; /* Adjust the max width as needed */
-  max-height: 40px; /* Adjust the max height as needed */
+    max-width: 40px; /* Adjust the max width as needed */
+    max-height: 40px; /* Adjust the max height as needed */
 }
 </style>
