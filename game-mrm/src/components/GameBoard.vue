@@ -264,9 +264,9 @@ export default {
         },
       selectSkin(index) {
         const selectedSkin = this.skins[index];
-        if (this.score >= selectedSkin.cost) {
+        if (this.highestScore >= selectedSkin.cost) {
           this.currentSnakeSkin = selectedSkin.image; // Update the current snake skin
-          this.score -= selectedSkin.cost;
+          // this.score -= selectedSkin.cost;
           this.closeShop();
         } else {
           alert("You don't have enough points to purchase this skin!");
