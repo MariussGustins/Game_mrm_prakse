@@ -72,8 +72,8 @@ export default {
   max-width: 400px;
   margin: auto;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px; /* Increased border-radius for rounded corners */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .form-group {
@@ -89,9 +89,10 @@ label {
 input,
 select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px; /* Increased padding for better spacing */
+  border: 1px solid #ddd; /* Lighter border color for a softer look */
+  border-radius: 6px; /* Slightly rounded corners for input fields */
+  box-sizing: border-box;
 }
 
 .button-container {
@@ -101,9 +102,15 @@ select {
 .register-button {
   background-color: #3498db;
   color: #fff;
-  padding: 10px 20px;
+  padding: 12px 20px; /* Increased padding for better spacing */
   border: none;
-  border-radius: 4px;
+  border-radius: 6px; /* Slightly rounded corners for buttons */
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.register-button:hover {
+  background-color: #297fb8; /* Darken the color on hover */
 }
 </style>
+

@@ -63,8 +63,8 @@ export default {
   max-width: 400px;
   margin: auto;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .form-group {
@@ -79,9 +79,10 @@ label {
 
 input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-sizing: border-box;
 }
 
 .button-container {
@@ -89,21 +90,40 @@ input {
   justify-content: space-between;
 }
 
-.log-in-button {
-  background-color: #3498db;
+.login-button {
+  width: 48%;
+  text-align: center;
+  background-color: #3498db; /* Blue color for login button */
   color: #fff;
-  padding: 10px 20px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
 }
 
 .register-button {
-  background-color: #ccc;
+  width: 48%;
+  text-align: center;
+  background-color: #ccc; /* Gray color for register button */
   color: #000;
-  padding: 10px 20px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.login-button:hover {
+  background-color: #297fb8;
+}
+
+.register-button:hover {
+  background-color: #bbb; /* Darken the gray color on hover */
 }
 </style>
+
+
+
+
+
