@@ -130,7 +130,46 @@ if ($action == 'save_score') {
     }
 }
 
+if ($action == 'get_highest_score') {
+    // Check if the username parameter is provided
+    if(isset($_GET['username'])) {
+        $username = $_GET['username'];
 
+        // Fetch the user ID for the provided username
+        $query = "SELECT id FROM users WHERE username = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $user_id = $row['id'];
+
+            // Fetch the highest score for the provided user ID
+            $query = "SELECT best_result AS highest_score FROM user_scores WHERE user_id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $highestScore = $row['highest_score'];
+                echo json_encode(array('highestScore' => $highestScore, 'error' => false));
+            } else {
+                // No score found for the provided username
+                echo json_encode(array('error' => 'No score found for the provided username'));
+            }
+        } else {
+            // User not found
+            echo json_encode(array('error' => 'User not found'));
+        }
+    } else {
+        // Username parameter is missing
+        echo json_encode(array('error' => 'Username parameter is missing'));
+    }
+}
 
 
 

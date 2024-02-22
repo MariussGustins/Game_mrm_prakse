@@ -59,6 +59,10 @@ export default {
 </script>
 
 <style scoped>
+
+
+
+
 .log-in-container {
   max-width: 400px;
   margin: auto;

@@ -103,16 +103,19 @@ export default {
         }
     },
     mounted() {
-        this.setupBoard();
-        this.placeFood();
-        window.addEventListener('keydown', this.handleKeyPress);
+      this.setupBoard();
+      this.placeFood();
+      window.addEventListener('keydown', this.handleKeyPress);
 
-        const sessionUsername = sessionStorage.getItem('username');
-        if (sessionUsername) {
-            this.loggedInUser = sessionUsername;
-        } else {
-            this.loggedInUser = 'User not logged in';
-        }
+      const sessionUsername = sessionStorage.getItem('username');
+      if (sessionUsername) {
+        this.loggedInUser = sessionUsername;
+      } else {
+        this.loggedInUser = 'User not logged in';
+      }
+
+      this.getHighestScore();
+
 
     },
     methods: {
@@ -192,6 +195,26 @@ export default {
                 this.handleGameOver();
             }
         },
+      getHighestScore() {
+        const sessionUsername = sessionStorage.getItem('username');
+        if (sessionUsername) {
+          // Fetch the highest score for the logged-in user from the database
+          axios.get(`http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=get_highest_score&username=${sessionUsername}`)
+              .then(response => {
+                console.log("Response from API:", response.data);
+                if (response.data && !response.data.error && response.data.highestScore !== null) {
+                  console.log("Highest Score:", response.data.highestScore);
+                  // Update highestScore data property
+                  this.highestScore = response.data.highestScore;
+                }
+              })
+              .catch(error => {
+                console.error("Error fetching highest score:", error);
+              });
+        } else {
+          console.error("Session username is missing.");
+        }
+      },
         handleGameOver() {
             if (this.score > this.highestScore) {
                 this.highestScore = this.score;
