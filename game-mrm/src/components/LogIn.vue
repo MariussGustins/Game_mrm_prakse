@@ -65,10 +65,11 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 400px;
-  width: 100%;
+  width: 90%;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
 
 .form-group {
@@ -91,13 +92,12 @@ input {
 
 .button-container {
   display: flex;
-  justify-content: space-between;
+  gap: 10px; /* Adds space between buttons */
 }
 
 .login-button,
 .register-button {
-  width: 48%;
-  text-align: center;
+  flex: 1; /* Equal width for both buttons */
   padding: 12px 20px;
   border: none;
   border-radius: 6px;
@@ -122,4 +122,18 @@ input {
 .register-button:hover {
   background-color: #bbb;
 }
+
+/* Media queries for responsiveness */
+@media (min-width: 768px) {
+  .log-in-container {
+    width: 70%;
+  }
+}
+
+@media (min-width: 992px) {
+  .log-in-container {
+    width: 50%;
+  }
+}
 </style>
+

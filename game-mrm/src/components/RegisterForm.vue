@@ -74,10 +74,11 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 400px;
-  width: 100%;
+  width: 90%; /* Adjusted width for better responsiveness */
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
 
 .form-group {
@@ -93,9 +94,9 @@ label {
 input,
 select {
   width: 100%;
-  padding: 12px; /* Increased padding for better spacing */
-  border: 1px solid #ddd; /* Lighter border color for a softer look */
-  border-radius: 6px; /* Slightly rounded corners for input fields */
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   box-sizing: border-box;
 }
 
@@ -106,15 +107,29 @@ select {
 .register-button {
   background-color: #3498db;
   color: #fff;
-  padding: 12px 20px; /* Increased padding for better spacing */
+  padding: 12px 20px;
   border: none;
-  border-radius: 6px; /* Slightly rounded corners for buttons */
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
 }
 
 .register-button:hover {
-  background-color: #297fb8; /* Darken the color on hover */
+  background-color: #297fb8;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .register-form-container {
+    width: 80%;
+  }
+}
+
+@media (max-width: 576px) {
+  .register-form-container {
+    width: 95%;
+  }
 }
 </style>
+
 
