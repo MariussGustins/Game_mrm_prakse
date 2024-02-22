@@ -69,10 +69,14 @@ export default {
 
 <style scoped>
 .register-form-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   max-width: 400px;
-  margin: auto;
+  width: 100%;
   padding: 20px;
-  border-radius: 12px; /* Increased border-radius for rounded corners */
+  border-radius: 12px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 

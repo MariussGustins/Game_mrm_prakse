@@ -59,13 +59,13 @@ export default {
 </script>
 
 <style scoped>
-
-
-
-
 .log-in-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   max-width: 400px;
-  margin: auto;
+  width: 100%;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -94,11 +94,10 @@ input {
   justify-content: space-between;
 }
 
-.login-button {
+.login-button,
+.register-button {
   width: 48%;
   text-align: center;
-  background-color: #3498db; /* Blue color for login button */
-  color: #fff;
   padding: 12px 20px;
   border: none;
   border-radius: 6px;
@@ -106,16 +105,14 @@ input {
   transition: background-color 0.3s ease-in-out;
 }
 
+.login-button {
+  background-color: #3498db;
+  color: #fff;
+}
+
 .register-button {
-  width: 48%;
-  text-align: center;
-  background-color: #ccc; /* Gray color for register button */
+  background-color: #ccc;
   color: #000;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
 }
 
 .login-button:hover {
@@ -123,11 +120,6 @@ input {
 }
 
 .register-button:hover {
-  background-color: #bbb; /* Darken the gray color on hover */
+  background-color: #bbb;
 }
 </style>
-
-
-
-
-
