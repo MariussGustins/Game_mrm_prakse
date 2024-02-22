@@ -286,60 +286,83 @@ export default {
 
 <style scoped>
 .snake-cell {
-    width: 30px;
-    height: 30px;
-    border: 2px solid #393e46;
-    background-size: cover;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #393e46;
+  background-size: cover;
 }
 
 .container {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
+
 #game-board {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(20, 30px);
-    border: 5px solid #393e46;
-    background-color: #222831;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin-left:60px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(20, 30px);
+  border: 5px solid #393e46;
+  background-color: #222831;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  margin: 10px; /* Adjust margin as needed */
 }
 
 .cell {
-    width: 30px; /* Original size */
-    height: 30px; /* Original size */
-    border: 2px solid #393e46; /* Border for each cell */
+  width: 30px; /* Original size */
+  height: 30px; /* Original size */
+  border: 2px solid #393e46; /* Border for each cell */
 }
 
 .snake {
-    background-image: url('../assets/food.jpeg');
-    background-size: cover;
+  background-image: url('../assets/food.jpeg');
+  background-size: cover;
 }
 
 .food {
-    background-image: url("../assets/food3.png");
-    background-size: cover;
+  background-image: url("../assets/food3.png");
+  background-size: cover;
 }
 
 .arrow {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid black;
-    transition: transform 0.2s;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid black;
+  transition: transform 0.2s;
 }
 
-
 .player-data {
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 40px;
-    margin-right: 70px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px; /* Adjust margin as needed */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  flex-basis: calc(50% - 20px); /* Adjust width and margin as needed */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .player-data {
+    flex-basis: calc(100% - 20px);
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    justify-content: space-between; /* Adjust the space between as needed */
+  }
 }
 
 .player-data-header {
@@ -368,7 +391,6 @@ export default {
     color: #555;
 }
 
-
 .shop-popup {
     position: fixed;
     top: 50%;
@@ -385,6 +407,7 @@ export default {
 .shop-popup.active {
     opacity: 1;
 }
+
 .button {
     margin: 20px;
     display: inline-block;
