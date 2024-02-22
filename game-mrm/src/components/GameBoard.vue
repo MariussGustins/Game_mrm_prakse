@@ -11,8 +11,6 @@
                             :style="{ backgroundImage: 'url(' + require(`@/assets/${currentSnakeSkin}`) + ')' }"
                             class="snake-cell"
                         ></div>
-
-<!--                        <div :style="{ backgroundImage: 'url(' + require(`@/assets/${currentSnakeSkin}`) + ')' }"></div>-->
                     </div>
                 </div>
                 <!-- Game Over popup -->
@@ -77,7 +75,7 @@ export default {
         return {
             loggedInUser: '',
             board: [],
-            snake: [], // Initialize as an empty array
+            snake: [],
             direction: 'right',
             food: {},
             gameOver: false,
@@ -98,9 +96,7 @@ export default {
         arrowDirection() {
             return 'arrow-' + this.direction;
         },
-        currentSnakeSkinImageUrl() {
-            return require(`@/assets/${this.currentSnakeSkin}`);
-        }
+
     },
     mounted() {
       this.setupBoard();
@@ -120,7 +116,7 @@ export default {
     },
     methods: {
         setupBoard() {
-            this.board = []; //pievienoju sito
+            this.board = [];
             for (let i = 0; i < 20; i++) {
                 this.board.push(new Array(20).fill(0));
             }
@@ -138,18 +134,6 @@ export default {
                 col = Math.floor(Math.random() * 20);
             } while (this.isSnake(row, col));
             this.food = {row, col};
-        },
-        moveUp() {
-            if (this.direction !== 'down') this.direction = 'up';
-        },
-        moveDown() {
-            if (this.direction !== 'up') this.direction = 'down';
-        },
-        moveLeft() {
-            if (this.direction !== 'right') this.direction = 'left';
-        },
-        moveRight() {
-            if (this.direction !== 'left') this.direction = 'right';
         },
         handleKeyPress(event) {
             switch (event.key) {
@@ -250,14 +234,6 @@ export default {
             this.$refs.gameOverPopup.classList.remove('active');
             // Remove 'active' class from the game over popup
         },
-
-        gameLoop() {
-            setInterval(() => {
-                if (!this.gameOver) {
-                    this.moveSnake();
-                }
-            }, 200);
-        },
         startGame() {
             this.gameOver = false;
             this.score = 0;
@@ -356,29 +332,6 @@ export default {
     transition: transform 0.2s;
 }
 
-.arrow-up {
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%) rotate(180deg);
-}
-
-.arrow-down {
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.arrow-left {
-    left: -10px;
-    top: 50%;
-    transform: translateY(-50%) rotate(90deg);
-}
-
-.arrow-right {
-    right: -10px;
-    top: 50%;
-    transform: translateY(-50%) rotate(-90deg);
-}
 
 .player-data {
     background-color: #f0f0f0;

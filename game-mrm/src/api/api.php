@@ -57,15 +57,12 @@ if($action=='login'){
     $result=$conn->query($sql);
     $num=mysqli_num_rows($result);
     if($num > 0){
-        // Retrieve the username from the session
-        $loggedInUser = $_SESSION['username'];
 
-// Fetch the username from the database
+        $loggedInUser = $_SESSION['username'];
         $sqlUsername = "SELECT username FROM users WHERE username = '$loggedInUser'";
         $resultUsername = $conn->query($sqlUsername);
 
         if ($resultUsername->num_rows > 0) {
-            // Fetch the username from the result
             $row = $resultUsername->fetch_assoc();
             $usernameFromDatabase = $row['username'];
         } else {
@@ -80,7 +77,6 @@ if($action=='login'){
     }
 }
 if ($action == 'save_score') {
-    // Retrieve the score, best_result, and username from the request
     $score = $_POST['score'];
     $best_result = $_POST['best_result'];
     $logusername = $_POST['logusername'];
