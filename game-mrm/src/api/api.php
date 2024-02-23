@@ -168,6 +168,23 @@ if ($action == 'get_highest_score') {
 }
 
 
+if ($action == 'get_top_scores') {
+    $query = "SELECT username, best_result AS highest_score FROM user_scores JOIN users ON user_scores.user_id = users.id ORDER BY best_result DESC LIMIT 10";
+    $result = $conn->query($query);
+
+    if ($result->num_rows > 0) {
+        $topScores = array();
+        while ($row = $result->fetch_assoc()) {
+            $topScores[] = array(
+                'username' => $row['username'],
+                'highest_score' => $row['highest_score']
+            );
+        }
+        echo json_encode(array('topScores' => $topScores, 'error' => false));
+    } else {
+        echo json_encode(array('error' => 'No top scores found'));
+    }
+}
 
 
 if ($action == 'check_login') {

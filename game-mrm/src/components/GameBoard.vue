@@ -49,7 +49,22 @@
                         <img :src="require(`@/assets/${currentSnakeSkin}`)" alt="Snake Skin" class="snake-skin-img">
                     </div>
                 </div>
+              <div class="player-data-header">Top 10 Score Board</div>
+              <div class="player-data-info">
+                <div class="info-item">
+                  <span class="info-label"></span>
+                  <ul class="top-scores-list">
+                    <li v-for="(topScore, index) in topScores" :key="index">
+                      <span class="score-place">{{ index + 1 }}.</span>
+                      <span class="score-details">
+            <span class="username">{{ topScore.username }}:</span>
+            <span class="score">{{ topScore.highest_score }}</span>
+          </span>
+                    </li>
+                  </ul>
+                </div>
             </div>
+
         </div>
         <!-- Buttons -->
         <button class="button" @click="startGame">Start</button>
@@ -65,6 +80,7 @@
             </div>
             <button class="button" @click="closeShop">Close</button>
         </div>
+    </div>
     </div>
 </template>
 
@@ -89,6 +105,7 @@ export default {
             ],
             currentSnakeSkin: 'food.jpeg', // default skin image
             highestScore: 0,
+            topScores: [],
 
         };
     },
@@ -111,7 +128,8 @@ export default {
       }
 
       this.getHighestScore();
-
+      this.getTopScores();
+      this.pollTopScores();
 
     },
     methods: {
@@ -199,6 +217,17 @@ export default {
           console.error("Session username is missing.");
         }
       },
+      getTopScores() {
+        axios.get(`http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=get_top_scores`)
+            .then(response => {
+              if (!response.data.error) {
+                this.topScores = response.data.topScores;
+              }
+            })
+            .catch(error => {
+              console.error("Error fetching top scores:", error);
+            });
+      },
         handleGameOver() {
             if (this.score > this.highestScore) {
                 this.highestScore = this.score;
@@ -221,6 +250,14 @@ export default {
                 .catch(error => {
                     console.error("Error:", error);
                 });
+          // Save the current score
+          const currentScore = this.score;
+
+          if (currentScore > this.highestScore) {
+            this.highestScore = currentScore;
+          }
+
+          this.getTopScores();
 
             // Remove event listener for keydown events
             window.removeEventListener('keydown', this.handleKeyPress);
@@ -229,6 +266,11 @@ export default {
                 this.$refs.gameOverPopup.classList.add('active');
             }, 50); // Adjust the delay as needed
         },
+      pollTopScores() {
+        setInterval(() => {
+          this.getTopScores();
+        }, 600);
+      },
         closeGameOverPopup() {
             // Hide game over popup
             this.$refs.gameOverPopup.classList.remove('active');
@@ -404,7 +446,7 @@ export default {
     transition: opacity 0.3s ease-in-out;
 }
 
-.shop-popup.active {
+.shop-popup {
     opacity: 1;
 }
 
@@ -488,5 +530,25 @@ export default {
 .snake-skin-img {
     max-width: 40px; /* Adjust the max width as needed */
     max-height: 40px; /* Adjust the max height as needed */
+}
+.top-scores-list {
+  list-style-type: none;
+  padding: 0;
+  text-align: left;
+  font-weight: bold;
+}
+.score-place {
+  font-weight: bold;
+  margin-right: 5px;
+}
+.score-details {
+  margin: 0; /* Reset margin */
+}
+.username {
+  color: #007bff; /* Highlight username */
+  margin-right: 5px;
+}
+.score {
+  color: #28a745; /* Highlight score */
 }
 </style>
