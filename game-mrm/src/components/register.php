@@ -12,9 +12,9 @@ if (!empty($data)) {
     $password = $data->password;
 
 $servername = "sql11.freesqldatabase.com";
-$username = "sql11684548";
-$password = "C9UjfKj5PY";
-$database = "sql11684548";
+$username = "sql11686713";
+$password = "FcnicVN4fN";
+$database = "sql11686713";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database);
