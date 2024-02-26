@@ -1,4 +1,4 @@
 <?php
 session_start();
 
-$conn = new mysqli("sql11.freesqldatabase.com","sql11684548","C9UjfKj5PY","sql11684548");
+$conn = new mysqli("sql11.freesqldatabase.com","sql11686713",'FcnicVN4fN',"sql11686713");

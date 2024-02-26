@@ -5,16 +5,16 @@
 </template>
 
 <script>
-import { createRouter, createWebHashHistory } from 'vue-router'; // Import createWebHashHistory
+import {createRouter, createWebHashHistory} from 'vue-router'; // Import createWebHashHistory
 
 import LogIn from './components/LogIn.vue';
 import GameBoard from './components/GameBoard.vue';
 import RegisterForm from './components/RegisterForm.vue';
 
 const routes = [
-  { path: '/', component: LogIn },
-  { path: '/game', component: GameBoard },
-  { path: '/register', component: RegisterForm }
+  {path: '/', component: LogIn},
+  {path: '/game', component: GameBoard},
+  {path: '/register', component: RegisterForm}
 ];
 
 const router = createRouter({
