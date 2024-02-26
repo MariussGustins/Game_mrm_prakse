@@ -28,6 +28,12 @@
                 </div>
                 <div class="arrow" :class="arrowDirection"></div>
             </div>
+            <div class="onscreen-controls" v-if="isMobile">
+                <button @click="changeDirection('left')">Up</button>
+                <button @click="changeDirection('up')">Left</button>
+                <button @click="changeDirection('down')">Right</button>
+                <button @click="changeDirection('right')">Down</button>
+            </div>
             <!-- Player's data section -->
             <div class="player-data">
                 <div class="player-data-header">Player Data</div>
@@ -49,38 +55,38 @@
                         <img :src="require(`@/assets/${currentSnakeSkin}`)" alt="Snake Skin" class="snake-skin-img">
                     </div>
                 </div>
-              <div class="player-data-header">Top 10 Score Board</div>
-              <div class="player-data-info">
-                <div class="info-item">
-                  <span class="info-label"></span>
-                  <ul class="top-scores-list">
-                    <li v-for="(topScore, index) in topScores" :key="index">
-                      <span class="score-place">{{ index + 1 }}.</span>
-                      <span class="score-details">
+                <div class="player-data-header">Top 10 Score Board</div>
+                <div class="player-data-info">
+                    <div class="info-item">
+                        <span class="info-label"></span>
+                        <ul class="top-scores-list">
+                            <li v-for="(topScore, index) in topScores" :key="index">
+                                <span class="score-place">{{ index + 1 }}.</span>
+                                <span class="score-details">
             <span class="username">{{ topScore.username }}:</span>
             <span class="score">{{ topScore.highest_score }}</span>
           </span>
-                    </li>
-                  </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-        </div>
-        <!-- Buttons -->
-        <button class="button" @click="startGame">Start</button>
-        <button class="button" @click="restartGame">Restart</button>
-        <button class="button" @click="openShop">Shop</button>
-        <button class="button" @click="logout()">Logout</button>
-
-        <!-- Shop popup -->
-        <div v-if="showShop" ref="shopPopup" class="shop-popup">
-            <div v-for="(skin, index) in skins" :key="index">
-                <img :src="require(`@/assets/${skin.image}`)" alt="Skin" class="snake-skin-img" @click="selectSkin(index)" />
-                <p>Cost: {{ skin.cost }} points</p>
             </div>
-            <button class="button" @click="closeShop">Close</button>
+            <!-- Buttons -->
+            <button class="button" @click="startGame">Start</button>
+            <button class="button" @click="restartGame">Restart</button>
+            <button class="button" @click="openShop">Shop</button>
+            <button class="button" @click="logout()">Logout</button>
+
+            <!-- Shop popup -->
+            <div v-if="showShop" ref="shopPopup" class="shop-popup">
+                <div v-for="(skin, index) in skins" :key="index">
+                    <img :src="require(`@/assets/${skin.image}`)" alt="Skin" class="snake-skin-img" @click="selectSkin(index)" />
+                    <p>Cost: {{ skin.cost }} points</p>
+                </div>
+                <button class="button" @click="closeShop">Close</button>
+            </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -110,29 +116,37 @@ export default {
         };
     },
     computed: {
+        isMobile() {
+            return window.innerWidth <= 768; // Adjust the breakpoint as needed
+        },
         arrowDirection() {
             return 'arrow-' + this.direction;
         },
 
+
     },
     mounted() {
-      this.setupBoard();
-      this.placeFood();
-      window.addEventListener('keydown', this.handleKeyPress);
+        this.setupBoard();
+        this.placeFood();
+        window.addEventListener('keydown', this.handleKeyPress);
 
-      const sessionUsername = sessionStorage.getItem('username');
-      if (sessionUsername) {
-        this.loggedInUser = sessionUsername;
-      } else {
-        this.loggedInUser = 'User not logged in';
-      }
+        const sessionUsername = sessionStorage.getItem('username');
+        if (sessionUsername) {
+            this.loggedInUser = sessionUsername;
+        } else {
+            this.loggedInUser = 'User not logged in';
+        }
 
-      this.getHighestScore();
-      this.getTopScores();
-      this.pollTopScores();
+        this.getHighestScore();
+        this.getTopScores();
+        this.pollTopScores();
 
     },
     methods: {
+        changeDirection(newDirection) {
+            // Handle direction change based on button clicks
+            this.direction = newDirection;
+        },
         setupBoard() {
             this.board = [];
             for (let i = 0; i < 20; i++) {
@@ -197,37 +211,37 @@ export default {
                 this.handleGameOver();
             }
         },
-      getHighestScore() {
-        const sessionUsername = sessionStorage.getItem('username');
-        if (sessionUsername) {
-          // Fetch the highest score for the logged-in user from the database
-          axios.get(`http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=get_highest_score&username=${sessionUsername}`)
-              .then(response => {
-                console.log("Response from API:", response.data);
-                if (response.data && !response.data.error && response.data.highestScore !== null) {
-                  console.log("Highest Score:", response.data.highestScore);
-                  // Update highestScore data property
-                  this.highestScore = response.data.highestScore;
-                }
-              })
-              .catch(error => {
-                console.error("Error fetching highest score:", error);
-              });
-        } else {
-          console.error("Session username is missing.");
-        }
-      },
-      getTopScores() {
-        axios.get(`http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=get_top_scores`)
-            .then(response => {
-              if (!response.data.error) {
-                this.topScores = response.data.topScores;
-              }
-            })
-            .catch(error => {
-              console.error("Error fetching top scores:", error);
-            });
-      },
+        getHighestScore() {
+            const sessionUsername = sessionStorage.getItem('username');
+            if (sessionUsername) {
+                // Fetch the highest score for the logged-in user from the database
+                axios.get(`http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=get_highest_score&username=${sessionUsername}`)
+                    .then(response => {
+                        console.log("Response from API:", response.data);
+                        if (response.data && !response.data.error && response.data.highestScore !== null) {
+                            console.log("Highest Score:", response.data.highestScore);
+                            // Update highestScore data property
+                            this.highestScore = response.data.highestScore;
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error fetching highest score:", error);
+                    });
+            } else {
+                console.error("Session username is missing.");
+            }
+        },
+        getTopScores() {
+            axios.get(`http://localhost/Game_mrm_prakse/game-mrm/src/api/api.php?action=get_top_scores`)
+                .then(response => {
+                    if (!response.data.error) {
+                        this.topScores = response.data.topScores;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching top scores:", error);
+                });
+        },
         handleGameOver() {
             if (this.score > this.highestScore) {
                 this.highestScore = this.score;
@@ -250,14 +264,14 @@ export default {
                 .catch(error => {
                     console.error("Error:", error);
                 });
-          // Save the current score
-          const currentScore = this.score;
+            // Save the current score
+            const currentScore = this.score;
 
-          if (currentScore > this.highestScore) {
-            this.highestScore = currentScore;
-          }
+            if (currentScore > this.highestScore) {
+                this.highestScore = currentScore;
+            }
 
-          this.getTopScores();
+            this.getTopScores();
 
             // Remove event listener for keydown events
             window.removeEventListener('keydown', this.handleKeyPress);
@@ -266,11 +280,11 @@ export default {
                 this.$refs.gameOverPopup.classList.add('active');
             }, 50); // Adjust the delay as needed
         },
-      pollTopScores() {
-        setInterval(() => {
-          this.getTopScores();
-        }, 600);
-      },
+        pollTopScores() {
+            setInterval(() => {
+                this.getTopScores();
+            }, 600);
+        },
         closeGameOverPopup() {
             // Hide game over popup
             this.$refs.gameOverPopup.classList.remove('active');
@@ -328,83 +342,83 @@ export default {
 
 <style scoped>
 .snake-cell {
-  width: 30px;
-  height: 30px;
-  border: 2px solid #393e46;
-  background-size: cover;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #393e46;
+    background-size: cover;
 }
 
 .container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 #game-board {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(20, 30px);
-  border: 5px solid #393e46;
-  background-color: #222831;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  margin: 10px; /* Adjust margin as needed */
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(20, 30px);
+    border: 5px solid #393e46;
+    background-color: #222831;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin: 10px; /* Adjust margin as needed */
 }
 
 .cell {
-  width: 30px; /* Original size */
-  height: 30px; /* Original size */
-  border: 2px solid #393e46; /* Border for each cell */
+    width: 30px; /* Original size */
+    height: 30px; /* Original size */
+    border: 2px solid #393e46; /* Border for each cell */
 }
 
 .snake {
-  background-image: url('../assets/food.jpeg');
-  background-size: cover;
+    background-image: url('../assets/food.jpeg');
+    background-size: cover;
 }
 
 .food {
-  background-image: url("../assets/food3.png");
-  background-size: cover;
+    background-image: url("../assets/food3.png");
+    background-size: cover;
 }
 
 .arrow {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid black;
-  transition: transform 0.2s;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid black;
+    transition: transform 0.2s;
 }
 
 .player-data {
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 10px; /* Adjust margin as needed */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  flex-basis: calc(50% - 20px); /* Adjust width and margin as needed */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px; /* Adjust margin as needed */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    flex-basis: calc(50% - 20px); /* Adjust width and margin as needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    align-items: center;
-  }
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
 
-  .player-data {
-    flex-basis: calc(100% - 20px);
-  }
+    .player-data {
+        flex-basis: calc(100% - 20px);
+    }
 }
 
 @media (min-width: 992px) {
-  .container {
-    justify-content: space-between; /* Adjust the space between as needed */
-  }
+    .container {
+        justify-content: space-between; /* Adjust the space between as needed */
+    }
 }
 
 .player-data-header {
@@ -532,23 +546,40 @@ export default {
     max-height: 40px; /* Adjust the max height as needed */
 }
 .top-scores-list {
-  list-style-type: none;
-  padding: 0;
-  text-align: left;
-  font-weight: bold;
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+    font-weight: bold;
 }
 .score-place {
-  font-weight: bold;
-  margin-right: 5px;
+    font-weight: bold;
+    margin-right: 5px;
 }
 .score-details {
-  margin: 0; /* Reset margin */
+    margin: 0; /* Reset margin */
 }
 .username {
-  color: #007bff; /* Highlight username */
-  margin-right: 5px;
+    color: #007bff; /* Highlight username */
+    margin-right: 5px;
 }
 .score {
-  color: #28a745; /* Highlight score */
+    color: #28a745; /* Highlight score */
+}
+
+.onscreen-controls {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.onscreen-controls button {
+    background-color: #222831;
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 5px;
 }
 </style>
