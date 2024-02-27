@@ -143,13 +143,13 @@ export default {
         },
       visibleBoard() {
         if (this.screenWidth <= 320) {
-          return this.board.slice(0, 11).map(row => row.slice(0, 16)); // Adjust rows and columns for smaller screens
+          return this.board.slice(0, 9).map(row => row.slice(0, 8)); // Adjust rows and columns for smaller screens
         } else if (this.screenWidth <= 424) {
-          return this.board.slice(0, 12).map(row => row.slice(0, 6)); // Adjust rows and columns for smaller screens
+          return this.board.slice(0, 11).map(row => row.slice(0, 9)); // Adjust rows and columns for smaller screens
         } else if (this.screenWidth <= 425) {
-          return this.board.slice(0, 13).map(row => row.slice(0, 6)); // Adjust rows and columns for smaller screens
+          return this.board.slice(0, 13).map(row => row.slice(0, 12)); // Adjust rows and columns for smaller screens
         } else if (this.screenWidth <= 768) {
-          return this.board.slice(0, 20).map(row => row.slice(0, 10)); // Adjust rows and columns for smaller screens
+          return this.board.slice(0, 20).map(row => row.slice(0, 18)); // Adjust rows and columns for smaller screens
         } else {
           return this.board; // Use the entire board for larger screens
         }
@@ -558,8 +558,8 @@ export default {
 /* Adjust game board size for smaller screens */
 @media (max-width: 768px) {
   #game-board {
-    width: 80vw; /* Adjust width for smaller screens */
-    height: 80vw; /* Adjust height to maintain aspect ratio */
+    width: 78vw; /* Adjust width for smaller screens */
+    height: 81vw; /* Adjust height to maintain aspect ratio */
   }
 
   .cell {
@@ -570,37 +570,41 @@ export default {
 
 @media (max-width: 425px) {
   #game-board {
-    width: 90vw; /* Adjust width for smaller screens */
-    height: 90vw; /* Adjust height to maintain aspect ratio */
+    width: 92vw; /* Adjust width for smaller screens */
+    height: 91vw; /* Adjust height to maintain aspect ratio */
   }
 
   .cell {
-    width: calc(90vw / 20); /* Adjust cell width */
-    height: calc(90vw / 20); /* Adjust cell height */
+    width: calc(90vw / 13.5); /* Adjust cell width */
+    height: calc(90vw / 13.5); /* Adjust cell height */
   }
 }
 
 @media (max-width: 375px) {
   #game-board {
-    width: 95vw; /* Adjust width for smaller screens */
+    width: 89vw; /* Adjust width for smaller screens */
     height: 95vw; /* Adjust height to maintain aspect ratio */
   }
 
   .cell {
-    width: calc(95vw / 20); /* Adjust cell width */
-    height: calc(95vw / 20); /* Adjust cell height */
+    width: calc(95vw / 10); /* Adjust cell width */
+    height: calc(95vw / 10); /* Adjust cell height */
   }
 }
 
 @media (max-width: 320px) {
   #game-board {
-    width: 100vw; /* Adjust width for smaller screens */
-    height: 100vw; /* Adjust height to maintain aspect ratio */
+    width: 85vw; /* Adjust width for smaller screens */
+    height: 90vw; /* Adjust height to maintain aspect ratio */
   }
 
   .cell {
-    width: calc(100vw / 20); /* Adjust cell width */
-    height: calc(100vw / 20); /* Adjust cell height */
+    width: calc(100vw / 10); /* Adjust cell width */
+    height: calc(100vw / 10); /* Adjust cell height */
+  }
+  .snake-skin-img {
+    max-width: 20px; /* Adjust the max width as needed */
+    max-height: 20px; /* Adjust the max height as needed */
   }
 }
 .player-data-header {
