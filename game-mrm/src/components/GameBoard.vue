@@ -79,13 +79,15 @@
             <button class="button" @click="logout()">Logout</button>
 
             <!-- Shop popup -->
-            <div v-if="showShop" ref="shopPopup" class="shop-popup">
-                <div v-for="(skin, index) in skins" :key="index">
-                    <img :src="require(`@/assets/${skin.image}`)" alt="Skin" class="snake-skin-img" @click="selectSkin(index)" />
-                    <p>Cost: {{ skin.cost }} points</p>
-                </div>
-                <button class="button" @click="closeShop">Close</button>
+          <div v-if="showShop" ref="shopPopup" class="shop-popup">
+            <div class="skin-container">
+              <div v-for="(skin, index) in skins" :key="index">
+                <img :src="require(`@/assets/${skin.image}`)" alt="Skin" class="snake-skin-img" @click="selectSkin(index)" />
+                <p>Cost: {{ skin.cost }} points</p>
+              </div>
             </div>
+            <button class="button" @click="closeShop">Close</button>
+          </div>
         </div>
     </div>
 </template>
@@ -290,24 +292,30 @@ export default {
             this.$refs.gameOverPopup.classList.remove('active');
             // Remove 'active' class from the game over popup
         },
-        startGame() {
-            this.gameOver = false;
-            this.score = 0;
-            this.snake = [{row: 10, col: 10}]; // Reset the snake length
-            this.currentSnakeSkin = this.skins.find(skin => skin.image === this.currentSnakeSkin)?.image || this.skins[0].image;            this.setupBoard();
-            this.placeFood();
-            if (this.gameLoopInterval) {
-                clearInterval(this.gameLoopInterval);
-            }
-            this.gameLoopInterval = setInterval(() => {
-                if (!this.gameOver) {
-                    this.moveSnake();
-                }
-            }, 200);
-            window.addEventListener('keydown', this.handleKeyPress);
-        },
-
-
+      startGame() {
+        this.gameOver = false;
+        this.score = 0;
+        // Clear the snake cells
+        const snakeCells = document.querySelectorAll('.snake-cell');
+        snakeCells.forEach(cell => {
+          cell.style.backgroundImage = '';
+        });
+        // Reset the snake with new skin
+        this.snake = [{row: 10, col: 10}];
+        // Update the default skin image to the newly selected skin
+        this.currentSnakeSkin = this.skins.find(skin => skin.image === this.currentSnakeSkin)?.image || this.skins[0].image;
+        this.setupBoard();
+        this.placeFood();
+        if (this.gameLoopInterval) {
+          clearInterval(this.gameLoopInterval);
+        }
+        this.gameLoopInterval = setInterval(() => {
+          if (!this.gameOver) {
+            this.moveSnake();
+          }
+        }, 200);
+        window.addEventListener('keydown', this.handleKeyPress);
+      },
         restartGame() {
             this.startGame();
         },
@@ -323,16 +331,19 @@ export default {
                 this.showShop = false;
             }, 300); // Match the transition duration
         },
-        selectSkin(index) {
-            const selectedSkin = this.skins[index];
-            if (this.highestScore >= selectedSkin.cost) {
-                this.currentSnakeSkin = selectedSkin.image; // Update the current snake skin
-                // this.score -= selectedSkin.cost;
-                this.closeShop();
-            } else {
-                alert("You don't have enough points to purchase this skin!");
-            }
-        },
+      selectSkin(index) {
+        const selectedSkin = this.skins[index];
+        if (this.highestScore >= selectedSkin.cost) {
+          this.currentSnakeSkin = selectedSkin.image; // Update the current snake skin
+          // Clear the container holding the skin images
+          const skinContainer = this.$refs.shopPopup.querySelector('.skin-container');
+          skinContainer.innerHTML = '';
+          // Close the shop popup
+          this.closeShop();
+        } else {
+          alert("You don't have enough points to purchase this skin!");
+        }
+      },
         logout() {
             this.$router.push({path: '/'});
         },
@@ -371,7 +382,6 @@ export default {
 }
 
 .snake {
-    background-image: url('../assets/food.jpeg');
     background-size: cover;
 }
 
