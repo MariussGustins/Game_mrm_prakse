@@ -20,17 +20,17 @@
             </div>
           </div>
             <!-- Game board -->
-            <div id="game-board">
-                <div v-for="(row, rowIndex) in board" :key="rowIndex">
-                    <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }">
-                        <!-- Apply inline style binding here for the snake's background image -->
-                        <div
-                            v-if="isSnake(rowIndex, colIndex)"
-                            :style="{ backgroundImage: 'url(' + require(`@/assets/${currentSnakeSkin}`) + ')' }"
-                            class="snake-cell"
-                        ></div>
-                    </div>
-                </div>
+          <div id="game-board">
+            <div v-for="(row, rowIndex) in visibleBoard" :key="rowIndex">
+              <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }">
+                <!-- Apply inline style binding here for the snake's background image -->
+                <div
+                    v-if="isSnake(rowIndex, colIndex)"
+                    :style="{ backgroundImage: 'url(' + require(`@/assets/${currentSnakeSkin}`) + ')' }"
+                    class="snake-cell"
+                ></div>
+              </div>
+            </div>
                 <!-- Game Over popup -->
                 <div v-if="gameOver" ref="gameOverPopup" class="game-over-popup">
                     <div>
@@ -129,6 +129,8 @@ export default {
             topScores: [],
             showMenu: false,
           isSideMenuOpen: false,
+          screenWidth: window.innerWidth,
+          screenHeight: window.innerHeight,
 
         };
     },
@@ -139,7 +141,19 @@ export default {
         arrowDirection() {
             return 'arrow-' + this.direction;
         },
-
+      visibleBoard() {
+        if (this.screenWidth <= 320) {
+          return this.board.slice(0, 11); // Adjust the number of rows for smaller screens
+        } else if (this.screenWidth <= 424) {
+          return this.board.slice(0, 12); // Adjust the number of rows for smaller screens
+        } else if (this.screenWidth <= 425) {
+          return this.board.slice(0, 13); // Adjust the number of rows for smaller screens
+        }else if (this.screenWidth <= 768) {
+          return this.board.slice(0, 20); // Adjust the number of rows for smaller screens
+        } else {
+          return this.board; // Use the entire board for larger screens
+        }
+      },
 
     },
     mounted() {
@@ -158,12 +172,18 @@ export default {
         this.getTopScores();
         this.pollTopScores();
 
+      window.addEventListener('resize', this.handleResize);
+
     },
     methods: {
         changeDirection(newDirection) {
             // Handle direction change based on button clicks
             this.direction = newDirection;
         },
+      handleResize() {
+        this.screenWidth = window.innerWidth;
+        this.screenHeight = window.innerHeight;
+      },
       toggleSideMenu() {
         this.isSideMenuOpen = !this.isSideMenuOpen;
       },
@@ -481,6 +501,8 @@ export default {
     width: 30px; /* Original size */
     height: 30px; /* Original size */
     border: 2px solid #393e46; /* Border for each cell */
+  max-width: 100%; /* Ensure cells do not extend beyond the game board */
+  max-height: 100%;
 }
 
 .snake {
@@ -533,6 +555,54 @@ export default {
     }
 }
 
+/* Adjust game board size for smaller screens */
+@media (max-width: 768px) {
+  #game-board {
+    width: 80vw; /* Adjust width for smaller screens */
+    height: 80vw; /* Adjust height to maintain aspect ratio */
+  }
+
+  .cell {
+    width: calc(80vw / 20); /* Adjust cell width */
+    height: calc(80vw / 20); /* Adjust cell height */
+  }
+}
+
+@media (max-width: 425px) {
+  #game-board {
+    width: 90vw; /* Adjust width for smaller screens */
+    height: 90vw; /* Adjust height to maintain aspect ratio */
+  }
+
+  .cell {
+    width: calc(90vw / 20); /* Adjust cell width */
+    height: calc(90vw / 20); /* Adjust cell height */
+  }
+}
+
+@media (max-width: 375px) {
+  #game-board {
+    width: 95vw; /* Adjust width for smaller screens */
+    height: 95vw; /* Adjust height to maintain aspect ratio */
+  }
+
+  .cell {
+    width: calc(95vw / 20); /* Adjust cell width */
+    height: calc(95vw / 20); /* Adjust cell height */
+  }
+}
+
+@media (max-width: 320px) {
+  #game-board {
+    width: 100vw; /* Adjust width for smaller screens */
+    height: 100vw; /* Adjust height to maintain aspect ratio */
+  }
+
+  .cell {
+    width: calc(100vw / 20); /* Adjust cell width */
+    height: calc(100vw / 20); /* Adjust cell height */
+  }
+}
 .player-data-header {
     font-size: 30px;
     font-weight: bold;
