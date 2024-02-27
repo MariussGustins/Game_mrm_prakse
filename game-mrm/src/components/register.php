@@ -11,38 +11,38 @@ if (!empty($data)) {
     $username = $data->username;
     $password = $data->password;
 
-$servername = "sql11.freesqldatabase.com";
-$username = "sql11686713";
-$password = "FcnicVN4fN";
-$database = "sql11686713";
+    $servername = "sql11.freesqldatabase.com";
+    $username = "sql11686713";
+    $password = "FcnicVN4fN";
+    $database = "sql11686713";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $database);
+    $conn = new mysqli($servername, $username, $password, $database);
 
 // Check connection
-if ($conn->connect_error) {
-die("Connection failed: " . $conn->connect_error);
-}
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
 // Prepare SQL statement
-$sql = "INSERT INTO users (first_name, last_name, email, username, password)
+    $sql = "INSERT INTO users (first_name, last_name, email, username, password)
 VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 // Bind parameters and execute the statement
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssssi", $firstName, $lastName, $email, $username, $password);
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssi", $firstName, $lastName, $email, $username, $password);
 
-if ($stmt->execute()) {
+    if ($stmt->execute()) {
 // Registration successful
-$response = ['success' => true, 'message' => 'User registered successfully'];
-} else {
+        $response = ['success' => true, 'message' => 'User registered successfully'];
+    } else {
 // Registration failed
-$response = ['success' => false, 'message' => 'Failed to register user'];
-}
+        $response = ['success' => false, 'message' => 'Failed to register user'];
+    }
 
 // Close connection
-$stmt->close();
-$conn->close();
+    $stmt->close();
+    $conn->close();
 
 // Respond with JSON
     header('Content-Type: application/json');
@@ -52,4 +52,3 @@ $conn->close();
     http_response_code(400);
     echo json_encode(['error' => 'No data received']);
 }
-
