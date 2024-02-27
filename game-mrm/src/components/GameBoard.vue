@@ -121,7 +121,7 @@ export default {
             skins: [
                 {image: 'food.jpeg', cost: 0 },
                 { image: 'food2.png', cost: 1 },
-                { image: 'logo.png', cost: 20 },
+                { image: 'skin.jpeg', cost: 20 },
                 // Add more skins as needed
             ],
             currentSnakeSkin: 'food.jpeg', // default skin image
