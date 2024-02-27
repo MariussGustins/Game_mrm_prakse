@@ -143,13 +143,13 @@ export default {
         },
       visibleBoard() {
         if (this.screenWidth <= 320) {
-          return this.board.slice(0, 11); // Adjust the number of rows for smaller screens
+          return this.board.slice(0, 11).map(row => row.slice(0, 16)); // Adjust rows and columns for smaller screens
         } else if (this.screenWidth <= 424) {
-          return this.board.slice(0, 12); // Adjust the number of rows for smaller screens
+          return this.board.slice(0, 12).map(row => row.slice(0, 6)); // Adjust rows and columns for smaller screens
         } else if (this.screenWidth <= 425) {
-          return this.board.slice(0, 13); // Adjust the number of rows for smaller screens
-        }else if (this.screenWidth <= 768) {
-          return this.board.slice(0, 20); // Adjust the number of rows for smaller screens
+          return this.board.slice(0, 13).map(row => row.slice(0, 6)); // Adjust rows and columns for smaller screens
+        } else if (this.screenWidth <= 768) {
+          return this.board.slice(0, 20).map(row => row.slice(0, 10)); // Adjust rows and columns for smaller screens
         } else {
           return this.board; // Use the entire board for larger screens
         }
