@@ -1,6 +1,24 @@
 <template>
     <div>
         <div class="container">
+          <!-- Burger menu icon -->
+          <div class="burger-menu-icon" @click="toggleSideMenu">
+            <i class="fas fa-bars"></i>
+          </div>
+          <!-- Side menu -->
+          <div class="side-menu" :class="{ 'show': isSideMenuOpen }">
+            <!-- Close button -->
+            <div class="close-button" @click="toggleSideMenu">
+              <i class="fas fa-times"></i>
+            </div>
+            <!-- Menu content -->
+            <div class="menu-content">
+              <button class="button" @click="startGameAndCloseMenu">Start</button>
+              <button class="button" @click="restartGameAndCloseMenu">Restart</button>
+              <button class="button" @click="openShopAndCloseMenu">Shop</button>
+              <button class="button" @click="logoutAndCloseMenu">Logout</button>
+            </div>
+          </div>
             <!-- Game board -->
             <div id="game-board">
                 <div v-for="(row, rowIndex) in board" :key="rowIndex">
@@ -72,11 +90,6 @@
                 </div>
 
             </div>
-            <!-- Buttons -->
-            <button class="button" @click="startGame">Start</button>
-            <button class="button" @click="restartGame">Restart</button>
-            <button class="button" @click="openShop">Shop</button>
-            <button class="button" @click="logout()">Logout</button>
 
             <!-- Shop popup -->
           <div v-if="showShop" ref="shopPopup" class="shop-popup">
@@ -114,6 +127,8 @@ export default {
             currentSnakeSkin: 'food.jpeg', // default skin image
             highestScore: 0,
             topScores: [],
+            showMenu: false,
+          isSideMenuOpen: false,
 
         };
     },
@@ -149,6 +164,25 @@ export default {
             // Handle direction change based on button clicks
             this.direction = newDirection;
         },
+      toggleSideMenu() {
+        this.isSideMenuOpen = !this.isSideMenuOpen;
+      },
+      startGameAndCloseMenu() {
+        this.startGame();
+        this.toggleSideMenu();
+      },
+      restartGameAndCloseMenu() {
+        this.restartGame();
+        this.toggleSideMenu();
+      },
+      openShopAndCloseMenu() {
+        this.openShop();
+        this.toggleSideMenu();
+      },
+      logoutAndCloseMenu() {
+        this.logout();
+        this.toggleSideMenu();
+      },
         setupBoard() {
             this.board = [];
             for (let i = 0; i < 20; i++) {
@@ -352,6 +386,74 @@ export default {
 </script>
 
 <style scoped>
+
+/* Styling for the burger menu icon */
+.burger-menu-icon {
+  cursor: pointer;
+  color: #222831; /* Change the color as needed */
+}
+
+/* Styling for the side menu */
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px; /* Adjust the width as needed */
+  height: 100%;
+  background-color: #333; /* Adjust the background color as needed */
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000; /* Ensure the side menu appears on top */
+}
+
+.side-menu.show {
+  transform: translateX(0);
+}
+
+/* Styling for the close button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #fff; /* Close button color */
+}
+
+/* Menu content styling */
+.menu-content {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+/* Button styling */
+.button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  background-color: #222;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+/* Style for burger menu icon */
+.fa-bars {
+  font-size: 24px;
+  color: #222831;
+}
+
 .snake-cell {
     width: 30px;
     height: 30px;
