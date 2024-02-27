@@ -128,6 +128,7 @@ export default {
             highestScore: 0,
             topScores: [],
             showMenu: false,
+          isMobile: false,
           isSideMenuOpen: false,
           screenWidth: window.innerWidth,
           screenHeight: window.innerHeight,
@@ -135,24 +136,28 @@ export default {
         };
     },
     computed: {
-        isMobile() {
-            return window.innerWidth <= 768; // Adjust the breakpoint as needed
-        },
         arrowDirection() {
             return 'arrow-' + this.direction;
         },
       visibleBoard() {
+        let rows, cols;
         if (this.screenWidth <= 320) {
-          return this.board.slice(0, 9).map(row => row.slice(0, 8)); // Adjust rows and columns for smaller screens
+          rows = 9;
+          cols = 8;
         } else if (this.screenWidth <= 424) {
-          return this.board.slice(0, 11).map(row => row.slice(0, 9)); // Adjust rows and columns for smaller screens
+          rows = 11;
+          cols = 9;
         } else if (this.screenWidth <= 425) {
-          return this.board.slice(0, 13).map(row => row.slice(0, 12)); // Adjust rows and columns for smaller screens
+          rows = 13;
+          cols = 12;
         } else if (this.screenWidth <= 768) {
-          return this.board.slice(0, 20).map(row => row.slice(0, 18)); // Adjust rows and columns for smaller screens
+          rows = 20;
+          cols = 18;
         } else {
-          return this.board; // Use the entire board for larger screens
+          rows = 20;
+          cols = 20;
         }
+        return this.board.slice(0, rows).map(row => row.slice(0, cols));
       },
 
     },
@@ -174,8 +179,14 @@ export default {
 
       window.addEventListener('resize', this.handleResize);
 
+      this.checkMobile(); // Check if the screen is mobile on mount
+      window.addEventListener('resize', this.checkMobile); // Listen for resize events
+
     },
     methods: {
+      checkMobile() {
+        this.isMobile = window.innerWidth <= 768; // Adjust breakpoint as needed
+      },
         changeDirection(newDirection) {
             // Handle direction change based on button clicks
             this.direction = newDirection;
@@ -183,6 +194,8 @@ export default {
       handleResize() {
         this.screenWidth = window.innerWidth;
         this.screenHeight = window.innerHeight;
+        this.setupBoard();
+        this.placeFood();
       },
       toggleSideMenu() {
         this.isSideMenuOpen = !this.isSideMenuOpen;
