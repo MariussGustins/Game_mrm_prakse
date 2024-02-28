@@ -19,7 +19,7 @@
               <button class="button" @click="logoutAndCloseMenu">Logout</button>
             </div>
           </div>
-            <!-- Game board -->
+          <!-- Game board -->
           <div id="game-board">
             <div v-for="(row, rowIndex) in visibleBoard" :key="rowIndex">
               <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{ 'cell': true, 'snake': isSnake(rowIndex, colIndex), 'food': isFood(rowIndex, colIndex) }">
@@ -31,7 +31,7 @@
                 ></div>
               </div>
             </div>
-                <!-- Game Over popup -->
+            <!-- Game Over popup -->
                 <div v-if="gameOver" ref="gameOverPopup" class="game-over-popup">
                     <div>
                         Game Over!
@@ -178,7 +178,6 @@ export default {
         this.pollTopScores();
 
       window.addEventListener('resize', this.handleResize);
-
       this.checkMobile(); // Check if the screen is mobile on mount
       window.addEventListener('resize', this.checkMobile); // Listen for resize events
 
@@ -228,15 +227,17 @@ export default {
         isFood(row, col) {
             return this.food.row === row && this.food.col === col;
         },
-        placeFood() {
-            let row, col;
-            do {
-                row = Math.floor(Math.random() * 20);
-                col = Math.floor(Math.random() * 20);
-            } while (this.isSnake(row, col));
-            this.food = {row, col};
-        },
-        handleKeyPress(event) {
+      placeFood() {
+        let row, col;
+        // Ensure that the food is placed within the visible board boundaries
+        do {
+          row = Math.floor(Math.random() * this.visibleBoard.length);
+          col = Math.floor(Math.random() * this.visibleBoard[0].length);
+        } while (this.isSnake(row, col));
+        this.food = {row, col};
+      },
+
+      handleKeyPress(event) {
             switch (event.key) {
                 case 'ArrowUp':
                     this.direction = 'left';
@@ -368,8 +369,7 @@ export default {
           cell.style.backgroundImage = '';
         });
         // Reset the snake with new skin
-        this.snake = [{row: 10, col: 10}];
-        // Update the default skin image to the newly selected skin
+        this.snake = [{ row: Math.floor(this.visibleBoard.length / 2), col: Math.floor(this.visibleBoard[0].length / 2) }];        // Update the default skin image to the newly selected skin
         this.currentSnakeSkin = this.skins.find(skin => skin.image === this.currentSnakeSkin)?.image || this.skins[0].image;
         this.setupBoard();
         this.placeFood();
