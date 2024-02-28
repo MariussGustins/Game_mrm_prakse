@@ -11,6 +11,7 @@
         <div class="close-button" @click="toggleSideMenu">
           <i class="fas fa-times"></i>
         </div>
+        <br>
         <!-- Menu content -->
         <div class="menu-content">
           <button class="button" @click="startGameAndCloseMenu">Start</button>
@@ -430,6 +431,9 @@ export default {
 
 /* Styling for the burger menu icon */
 .burger-menu-icon {
+  position: relative;
+  top: -2px; /* Adjust as needed */
+  left: 10px; /* Adjust as needed */
   cursor: pointer;
   color: #222831; /* Change the color as needed */
 }
@@ -588,7 +592,7 @@ export default {
     background-color: #f0f0f0;
     border-radius: 10px;
     padding: 10px;
-    margin-top: 8px;
+    margin-top: 20px;
     margin-right: -17px;
     margin-left: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -597,6 +601,13 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+  }
+  .burger-menu-icon {
+    position: relative;
+    top: -328px; /* Adjust as needed */
+    left: -169px; /* Adjust as needed */
+    cursor: pointer;
+    color: #222831; /* Change the color as needed */
   }
 
 }
@@ -637,6 +648,13 @@ export default {
     justify-content: flex-start;
     align-items: center;
   }
+  .burger-menu-icon {
+    position: relative;
+    top: -297px; /* Adjust as needed */
+    left: -653px; /* Adjust as needed */
+    cursor: pointer;
+    color: #222831; /* Change the color as needed */
+  }
 }
 
 @media (max-width: 425px) {
@@ -673,6 +691,13 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+  }
+  .burger-menu-icon {
+    position: relative;
+    top: -2px; /* Adjust as needed */
+    left: 10px; /* Adjust as needed */
+    cursor: pointer;
+    color: #222831; /* Change the color as needed */
   }
 }
 
@@ -711,7 +736,13 @@ export default {
     justify-content: flex-start;
     align-items: center;
   }
-
+  .burger-menu-icon {
+    position: relative;
+    top: -2px; /* Adjust as needed */
+    left: 10px; /* Adjust as needed */
+    cursor: pointer;
+    color: #222831; /* Change the color as needed */
+  }
 }
 
 @media (max-width: 320px) {
@@ -752,7 +783,13 @@ export default {
     justify-content: flex-start;
     align-items: center;
   }
-
+  .burger-menu-icon {
+    position: relative;
+    top: -2px; /* Adjust as needed */
+    left: 10px; /* Adjust as needed */
+    cursor: pointer;
+    color: #222831; /* Change the color as needed */
+  }
 }
 .player-data-header {
   font-size: 30px;
