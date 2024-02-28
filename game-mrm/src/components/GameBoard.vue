@@ -276,7 +276,7 @@ export default {
             } else {
                 this.snake.pop();
             }
-            if (head.row < 0 || head.row >= 20 || head.col < 0 || head.col >= 20 || this.snake.slice(1).some(segment => segment.row === head.row && segment.col === head.col)) {
+            if (head.row < 0 || head.row >= this.visibleBoard.length -1 || head.col < 0 || head.col >= this.visibleBoard[0].length -1 || this.snake.slice(1).some(segment => segment.row === head.row && segment.col === head.col)) {
                 this.gameOver = true;
                 this.handleGameOver();
             }
